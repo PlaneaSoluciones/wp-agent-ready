@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.1] - 2026-06-21
+
+### Corregido
+- `wp-agent-ready-brief.md` y `phpstan-bootstrap.php` ya no se incluyen en el ZIP de release
+
 ## [0.5.0] - 2026-06-21
 
 ### Añadido

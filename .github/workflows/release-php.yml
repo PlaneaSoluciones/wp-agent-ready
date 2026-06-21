@@ -23,7 +23,8 @@ jobs:
             --exclude='.git' --exclude='.github' --exclude='.githooks' --exclude='.claude' \
             --exclude='dist' --exclude='vendor' \
             --exclude='composer.json' --exclude='composer.lock' \
-            --exclude='phpcs.xml' --exclude='phpstan.neon' --exclude='.gitignore' \
+            --exclude='phpcs.xml' --exclude='phpstan.neon' --exclude='phpstan-bootstrap.php' \
+            --exclude='.gitignore' --exclude='wp-agent-ready-brief.md' \
             . dist/wp-agent-ready/
           cd dist && zip -r ../wp-agent-ready.zip wp-agent-ready/
 
