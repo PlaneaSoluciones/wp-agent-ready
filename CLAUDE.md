@@ -77,4 +77,5 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 5 — Página de ajustes en admin
 
 ## Documentación operacional
-_Pendiente de crear página en BookStack._
+- **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/wp-agent-ready-plugin-wordpress-para-agentes-ia
+- **Stub WordPress:** https://bookstack.planea.com.es/books/wordpress/page/wp-agent-ready
