@@ -31,10 +31,13 @@ wp-agent-ready/
 │   ├── handler.php      ← lógica del handler; params: per_page, page, post_type, modified_after
 │   ├── sanitizer.php    ← wp_strip_all_tags() + elimina shortcodes sin expandir
 │   ├── yoast.php        ← lee _yoast_wpseo_metadesc/_title si Yoast activo
-│   ├── rate-limit.php   ← 60 req/hora por IP con transients; devuelve WP_Error si excede
-│   └── webhook.php      ← emite notificación en save_post; recibe POST /wpar/v1/sync
+│   ├── rate-limit.php   ← sliding window configurable (wpar_rate_limit) req/hora por IP
+│   ├── webhook.php      ← emite notificación en save_post; recibe POST /wpar/v1/sync
+│   └── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
 ├── public/
 │   └── well-known.php   ← rewrite rules para /.well-known/mcp.json y /llms.txt
+├── assets/
+│   └── js/admin.js      ← jQuery: probar conexión MCP y copiar API key
 └── languages/           ← text-domain: wp-agent-ready
 ```
 
@@ -67,7 +70,7 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 2 — Endpoint REST principal (`/wp-json/wpar/v1/content`)
 - [x] FASE 3 — Webhook de sincronización
 - [x] FASE 4 — Discoverabilidad (llms.txt + mcp.json)
-- [ ] FASE 5 — Página de ajustes en admin
+- [x] FASE 5 — Página de ajustes en admin
 
 ## Documentación operacional
 _Pendiente de crear página en BookStack._

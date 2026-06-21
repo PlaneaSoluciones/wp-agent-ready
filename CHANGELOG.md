@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-21
+
+### Añadido
+- Página de ajustes en **Ajustes › WP Agent Ready** con tres secciones:
+  - **Conexión con servidor MCP**: URL del endpoint MCP, API key del webhook editable, botón «Probar conexión» con resultado AJAX en tiempo real y botón «Copiar» la clave al portapapeles
+  - **Contenido**: selección de post types a exponer mediante checkboxes (por defecto `post` y `page`) y límite de peticiones por hora configurable (por defecto: 60)
+  - **Discoverabilidad**: opción para activar o desactivar la ruta `/llms.txt`
+- El endpoint `/wpar/v1/content` solo acepta ahora los post types configurados en ajustes (antes aceptaba cualquier tipo público)
+- La ruta `/llms.txt` respeta la opción de discoverabilidad y devuelve 404 si está desactivada
+
 ## [0.3.0] - 2026-06-21
 
 ### Añadido
