@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-21
+
+### Añadido
+- Opción **«Borrar datos al desinstalar»** en Ajustes › WP Agent Ready: si está marcada, al eliminar el plugin se borran de la base de datos todos los ajustes del plugin y las entradas de rate limiting
+- `uninstall.php` que ejecuta la limpieza de opciones y transients de rate limiting cuando la opción está activa
+
 ## [0.4.0] - 2026-06-21
 
 ### Añadido

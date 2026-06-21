@@ -106,6 +106,23 @@ function wpar_register_settings(): void {
 		'wpar-settings',
 		'wpar_section_discovery'
 	);
+
+	// Section: Advanced.
+	add_settings_section(
+		'wpar_section_advanced',
+		__( 'Avanzado', 'wp-agent-ready' ),
+		'__return_false',
+		'wpar-settings'
+	);
+
+	register_setting( 'wpar_settings', 'wpar_delete_on_uninstall', array( 'sanitize_callback' => 'wpar_sanitize_bool' ) );
+	add_settings_field(
+		'wpar_delete_on_uninstall',
+		__( 'Borrar datos al desinstalar', 'wp-agent-ready' ),
+		'wpar_field_delete_on_uninstall',
+		'wpar-settings',
+		'wpar_section_advanced'
+	);
 }
 
 /**
@@ -207,6 +224,21 @@ function wpar_field_rate_limit(): void {
 		<p class="description">%s</p>',
 		absint( get_option( 'wpar_rate_limit', 60 ) ),
 		esc_html__( 'Número máximo de peticiones por IP en una ventana de 1 hora (por defecto: 60).', 'wp-agent-ready' )
+	);
+}
+
+/**
+ * Render the delete-on-uninstall checkbox.
+ */
+function wpar_field_delete_on_uninstall(): void {
+	$enabled = (bool) get_option( 'wpar_delete_on_uninstall', false );
+
+	printf(
+		'<label><input type="checkbox" id="wpar_delete_on_uninstall" name="wpar_delete_on_uninstall" value="1"%s /> %s</label>
+		<p class="description">%s</p>',
+		checked( $enabled, true, false ),
+		esc_html__( 'Eliminar todas las opciones del plugin al desinstalar', 'wp-agent-ready' ),
+		esc_html__( 'Si está marcado, al desinstalar WP Agent Ready se borrarán de la base de datos la URL del MCP, la API key y el resto de ajustes. Esta acción no se puede deshacer.', 'wp-agent-ready' )
 	);
 }
 
