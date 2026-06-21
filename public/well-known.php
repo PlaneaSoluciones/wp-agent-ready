@@ -209,12 +209,12 @@ function wpar_build_llms_txt(): string {
  * AI crawlers a pointer to llms.txt and the content API even if the
  * rewrite-based /llms.txt is handled by another plugin.
  *
- * @param string $output  Current robots.txt content.
- * @param bool   $public  Whether the site allows indexing.
+ * @param string $output    Current robots.txt content.
+ * @param bool   $is_public Whether the site allows indexing.
  * @return string
  */
-function wpar_append_to_robots_txt( string $output, bool $public ): string {
-	if ( ! $public ) {
+function wpar_append_to_robots_txt( string $output, bool $is_public ): string {
+	if ( ! $is_public ) {
 		return $output;
 	}
 
