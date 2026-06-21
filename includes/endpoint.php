@@ -20,10 +20,29 @@ function wpar_register_routes(): void {
 		array(
 			'methods'             => WP_REST_Server::READABLE,
 			'callback'            => 'wpar_handle_content_request',
-			'permission_callback' => '__return_true',
+			'permission_callback' => 'wpar_content_permission_callback',
 			'args'                => wpar_content_route_args(),
 		)
 	);
+}
+
+/**
+ * Permission callback for the /content route.
+ *
+ * Returns 403 when the admin has disabled public access in plugin settings.
+ *
+ * @return true|WP_Error
+ */
+function wpar_content_permission_callback(): true|WP_Error {
+	if ( ! get_option( 'wpar_public_access', true ) ) {
+		return new WP_Error(
+			'wpar_access_disabled',
+			__( 'El acceso público al endpoint está desactivado.', 'wp-agent-ready' ),
+			array( 'status' => 403 )
+		);
+	}
+
+	return true;
 }
 
 /**

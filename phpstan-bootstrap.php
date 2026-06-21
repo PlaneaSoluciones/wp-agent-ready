@@ -8,7 +8,7 @@
  * @package WpAgentReady
  */
 
-define( 'WPAR_VERSION', '0.5.1' );
+define( 'WPAR_VERSION', '0.6.0' );
 define( 'WPAR_PLUGIN_DIR', __DIR__ . '/' );
 define( 'WPAR_PLUGIN_URL', 'https://example.com/wp-content/plugins/wp-agent-ready/' );
 define( 'WPAR_PLUGIN_FILE', __DIR__ . '/wp-agent-ready.php' );
