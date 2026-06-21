@@ -65,7 +65,7 @@ git tag vX.Y.Z && git push && git push --tags
 
 - [x] FASE 1 — CI/CD, estructura y convenciones
 - [x] FASE 2 — Endpoint REST principal (`/wp-json/wpar/v1/content`)
-- [ ] FASE 3 — Webhook de sincronización
+- [x] FASE 3 — Webhook de sincronización
 - [ ] FASE 4 — Discoverabilidad (llms.txt + mcp.json)
 - [ ] FASE 5 — Página de ajustes en admin
 
