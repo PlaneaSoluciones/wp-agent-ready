@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-06-21
+
+### Añadido
+- `/.well-known/mcp.json` — manifest de discoverabilidad con nombre del sitio, endpoints y tipos de contenido disponibles
+- `/llms.txt` — descripción en formato Markdown del sitio y la API para consumo por LLMs
+- `GET /wp-json/wpar/v1/manifest` — endpoint REST que devuelve el mismo manifest JSON
+- Ambas rutas con cabeceras `Cache-Control: public, max-age=3600`
+- Hook de desactivación que limpia las rewrite rules del plugin
+
 ## [0.2.0] - 2026-06-21
 
 ### Añadido
