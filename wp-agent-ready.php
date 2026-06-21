@@ -3,7 +3,7 @@
  * Plugin Name:       WP Agent Ready
  * Plugin URI:        https://github.com/PlaneaSoluciones/wp-agent-ready
  * Description:       Exposes WordPress published content to AI agents and LLMs via a clean REST API.
- * Version:           0.1.0
+ * Version:           0.4.0
  * Requires at least: 6.0
  * Requires PHP:      8.4
  * Author:            Planea Soluciones Informáticas
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPAR_VERSION', '0.1.0' );
+define( 'WPAR_VERSION', '0.4.0' );
 define( 'WPAR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPAR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAR_PLUGIN_FILE', __FILE__ );
@@ -28,12 +28,25 @@ define( 'WPAR_PLUGIN_FILE', __FILE__ );
 // webhook.php must load on init (not just REST) so its hooks fire in admin/cron contexts too.
 add_action( 'init', 'wpar_bootstrap_init' );
 
+// Admin settings page — only in wp-admin and admin-ajax.php contexts.
+add_action( 'init', 'wpar_maybe_bootstrap_admin' );
+
 // REST-only components: rate limiting, sanitizer, Yoast, handler, content endpoint.
 // webhook.php is safe here too — require_once prevents double-loading.
 add_action( 'rest_api_init', 'wpar_bootstrap_rest', 1 );
 
 register_activation_hook( WPAR_PLUGIN_FILE, 'wpar_on_activation' );
 register_deactivation_hook( WPAR_PLUGIN_FILE, 'wpar_on_deactivation' );
+
+/**
+ * Load admin settings page only when in wp-admin or AJAX context.
+ */
+function wpar_maybe_bootstrap_admin(): void {
+	if ( ! is_admin() ) {
+		return;
+	}
+	require_once WPAR_PLUGIN_DIR . 'includes/admin.php';
+}
 
 /**
  * Load components needed on every request (admin, front-end, cron, REST).

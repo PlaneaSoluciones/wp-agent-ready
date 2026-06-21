@@ -9,3 +9,5 @@ parameters:
         - vendor
         - node_modules (?)
         - dist (?)
+    bootstrapFiles:
+        - phpstan-bootstrap.php

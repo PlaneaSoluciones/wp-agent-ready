@@ -46,6 +46,9 @@ function wpar_handle_discovery_requests(): void {
 	if ( get_query_var( 'wpar_manifest' ) ) {
 		wpar_serve_manifest();
 	} elseif ( get_query_var( 'wpar_llms_txt' ) ) {
+		if ( ! get_option( 'wpar_llms_txt_enabled', true ) ) {
+			return;
+		}
 		wpar_serve_llms_txt();
 	}
 }
