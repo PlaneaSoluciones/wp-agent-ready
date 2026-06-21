@@ -58,7 +58,9 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 #    Añadir entrada = X.Y.Z en la sección == Changelog == de readme.txt
 # 2. Bump versión en wp-agent-ready.php (cabecera + constante WPAR_VERSION)
 #    Bump Stable tag en readme.txt
-# 3. Commit de bump
+# 3. Verificar lint ANTES del commit (evita commits rotos)
+composer run check
+# 4. Commit de bump
 git add wp-agent-ready.php CHANGELOG.md readme.txt
 git commit -m "chore: bump version to X.Y.Z"
 
