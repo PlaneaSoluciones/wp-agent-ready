@@ -26,3 +26,7 @@ Thumbs.db
 
 # PHP
 .phpunit.result.cache
+
+# Project planning docs (not part of the plugin)
+*.brief.md
+wp-agent-ready-brief.md
