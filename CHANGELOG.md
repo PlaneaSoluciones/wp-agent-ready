@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-06-21
+
+### Añadido
+- Emisor de webhook: WordPress notifica al servidor MCP en cada publicación, actualización o eliminación de contenido
+- Receptor `POST /wp-json/wpar/v1/sync` protegido por API key Bearer para re-sincronización bajo demanda
+- Reintentos automáticos con backoff exponencial si el MCP no responde (hasta 3 intentos: 5 min, 15 min)
+- Generación automática de API key segura en la activación del plugin
+- Soporte para los tres eventos: `publish` (nueva publicación), `update` (edición), `delete` (eliminación o despublicación)
+
 ## [0.1.0] - 2026-06-21
 
 ### Añadido
