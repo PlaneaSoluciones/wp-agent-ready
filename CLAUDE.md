@@ -7,7 +7,8 @@ Plugin WordPress que expone el contenido publicado de un sitio de forma limpia y
 
 ```bash
 # Instalar dependencias de desarrollo
-composer install
+# Nota: PHP local puede ser < 8.4; usar --ignore-platform-reqs para desarrollo local
+composer install --ignore-platform-reqs
 
 # Linting (PHPCS con WordPress Coding Standards)
 composer run lint
@@ -63,7 +64,7 @@ git tag vX.Y.Z && git push && git push --tags
 ## Fases de desarrollo
 
 - [x] FASE 1 — CI/CD, estructura y convenciones
-- [ ] FASE 2 — Endpoint REST principal (`/wp-json/wpar/v1/content`)
+- [x] FASE 2 — Endpoint REST principal (`/wp-json/wpar/v1/content`)
 - [ ] FASE 3 — Webhook de sincronización
 - [ ] FASE 4 — Discoverabilidad (llms.txt + mcp.json)
 - [ ] FASE 5 — Página de ajustes en admin
