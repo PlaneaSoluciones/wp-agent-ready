@@ -25,13 +25,25 @@ define( 'WPAR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPAR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAR_PLUGIN_FILE', __FILE__ );
 
+// webhook.php must load on init (not just REST) so its hooks fire in admin/cron contexts too.
+add_action( 'init', 'wpar_bootstrap_init' );
+
+// REST-only components: rate limiting, sanitizer, Yoast, handler, content endpoint.
+// webhook.php is safe here too — require_once prevents double-loading.
 add_action( 'rest_api_init', 'wpar_bootstrap_rest', 1 );
-add_action( 'init', 'wpar_bootstrap_rewrite' );
+
+register_activation_hook( WPAR_PLUGIN_FILE, 'wpar_on_activation' );
 
 /**
- * Load REST API components.
- *
- * Conditional load: only active in REST context to avoid overhead on regular page requests.
+ * Load components needed on every request (admin, front-end, cron, REST).
+ */
+function wpar_bootstrap_init(): void {
+	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
+	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
+}
+
+/**
+ * Load REST-only components (conditional load — only active in REST context).
  */
 function wpar_bootstrap_rest(): void {
 	require_once WPAR_PLUGIN_DIR . 'includes/rate-limit.php';
@@ -43,8 +55,10 @@ function wpar_bootstrap_rest(): void {
 }
 
 /**
- * Load rewrite rules for well-known endpoints.
+ * Generate the webhook API key on first activation if not already set.
  */
-function wpar_bootstrap_rewrite(): void {
-	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
+function wpar_on_activation(): void {
+	if ( '' === (string) get_option( 'wpar_webhook_key', '' ) ) {
+		update_option( 'wpar_webhook_key', wp_generate_password( 48, false ), false );
+	}
 }
