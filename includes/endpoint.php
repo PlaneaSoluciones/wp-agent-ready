@@ -51,7 +51,8 @@ function wpar_content_route_args(): array {
 			'default'           => 'post',
 			'sanitize_callback' => 'sanitize_key',
 			'validate_callback' => static function ( string $value ): bool {
-				return in_array( $value, get_post_types( array( 'public' => true ) ), true );
+				$allowed = (array) get_option( 'wpar_post_types', array( 'post', 'page' ) );
+				return in_array( $value, $allowed, true );
 			},
 		),
 		'modified_after' => array(
