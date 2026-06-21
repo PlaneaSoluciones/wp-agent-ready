@@ -3,7 +3,7 @@ Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 Requires PHP: 8.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,6 +51,11 @@ Yes. Any public post type can be enabled from the settings page.
 By default nothing is deleted. If you want to remove all plugin data from the database, enable **Borrar datos al desinstalar** in **Settings › WP Agent Ready › Avanzado** before uninstalling.
 
 == Changelog ==
+
+= 0.7.0 =
+* Added robots.txt integration: X-llms-txt and X-Content-API directives are automatically appended, improving AI crawler discoverability even when /llms.txt is managed by another plugin.
+* Added `wpar_serve_llms_txt` filter for programmatic control of /llms.txt generation.
+* Changed /llms.txt rewrite rule priority to bottom for better compatibility with Yoast SEO and other plugins.
 
 = 0.6.0 =
 * Added public access toggle for the content endpoint, independent of search engine visibility settings.

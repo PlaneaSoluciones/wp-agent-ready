@@ -15,6 +15,7 @@ wpar_add_discovery_rewrite_rules();
 add_filter( 'query_vars', 'wpar_discovery_query_vars' );
 add_action( 'template_redirect', 'wpar_handle_discovery_requests' );
 add_action( 'rest_api_init', 'wpar_register_manifest_route' );
+add_filter( 'robots_txt', 'wpar_append_to_robots_txt', 10, 2 );
 
 /**
  * Register rewrite rules that map well-known paths to WordPress query vars.
@@ -23,7 +24,7 @@ add_action( 'rest_api_init', 'wpar_register_manifest_route' );
  */
 function wpar_add_discovery_rewrite_rules(): void {
 	add_rewrite_rule( '^\.well-known/mcp\.json$', 'index.php?wpar_manifest=1', 'top' );
-	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'top' );
+	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'bottom' );
 }
 
 /**
@@ -46,7 +47,8 @@ function wpar_handle_discovery_requests(): void {
 	if ( get_query_var( 'wpar_manifest' ) ) {
 		wpar_serve_manifest();
 	} elseif ( get_query_var( 'wpar_llms_txt' ) ) {
-		if ( ! get_option( 'wpar_llms_txt_enabled', true ) ) {
+		$enabled = (bool) apply_filters( 'wpar_serve_llms_txt', get_option( 'wpar_llms_txt_enabled', true ) );
+		if ( ! $enabled ) {
 			return;
 		}
 		wpar_serve_llms_txt();
@@ -196,4 +198,32 @@ function wpar_build_llms_txt(): string {
 	);
 
 	return implode( "\n", $lines ) . "\n";
+}
+
+/**
+ * Append WP Agent Ready discovery hints to robots.txt.
+ *
+ * Hooks into the standard WordPress `robots_txt` filter so both vanilla
+ * WordPress and Yoast SEO pick it up. The X- directives are informal
+ * extensions (same pattern as the Sitemap: directive Yoast adds) and give
+ * AI crawlers a pointer to llms.txt and the content API even if the
+ * rewrite-based /llms.txt is handled by another plugin.
+ *
+ * @param string $output  Current robots.txt content.
+ * @param bool   $public  Whether the site allows indexing.
+ * @return string
+ */
+function wpar_append_to_robots_txt( string $output, bool $public ): string {
+	if ( ! $public ) {
+		return $output;
+	}
+
+	$lines = array(
+		'',
+		'# WP Agent Ready',
+		'X-llms-txt: ' . home_url( '/llms.txt' ),
+		'X-Content-API: ' . rest_url( 'wpar/v1/content' ),
+	);
+
+	return $output . implode( "\n", $lines ) . "\n";
 }

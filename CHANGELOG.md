@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-06-21
+
+### Añadido
+- Integración con `robots.txt`: el plugin añade automáticamente las directivas `X-llms-txt` y `X-Content-API` al `robots.txt` del sitio, mejorando la descubribilidad para crawlers de IA aunque `/llms.txt` esté gestionado por otro plugin
+- Nuevo filtro PHP `wpar_serve_llms_txt` que permite a temas y otros plugins desactivar la generación de `/llms.txt` de forma programática, sin acceder a los ajustes del panel
+
+### Cambiado
+- La rewrite rule de `/llms.txt` pasa a prioridad `bottom`, cediendo el control a otros plugins (como Yoast SEO) si en el futuro añaden soporte propio para este fichero
+
 ## [0.6.0] - 2026-06-21
 
 ### Añadido
