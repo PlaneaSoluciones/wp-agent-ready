@@ -72,6 +72,15 @@ function wpar_register_settings(): void {
 		'wpar-settings'
 	);
 
+	register_setting( 'wpar_settings', 'wpar_public_access', array( 'sanitize_callback' => 'wpar_sanitize_bool' ) );
+	add_settings_field(
+		'wpar_public_access',
+		__( 'Acceso público al endpoint', 'wp-agent-ready' ),
+		'wpar_field_public_access',
+		'wpar-settings',
+		'wpar_section_content'
+	);
+
 	register_setting( 'wpar_settings', 'wpar_post_types', array( 'sanitize_callback' => 'wpar_sanitize_post_types' ) );
 	add_settings_field(
 		'wpar_post_types',
@@ -193,6 +202,21 @@ function wpar_field_test_connection(): void {
 		'<button type="button" id="wpar-test-connection" class="button">%s</button>
 		<span id="wpar-connection-result" style="margin-left:10px;line-height:28px"></span>',
 		esc_html__( 'Probar conexión', 'wp-agent-ready' )
+	);
+}
+
+/**
+ * Render the public access toggle field.
+ */
+function wpar_field_public_access(): void {
+	$enabled = (bool) get_option( 'wpar_public_access', true );
+
+	printf(
+		'<label><input type="checkbox" id="wpar_public_access" name="wpar_public_access" value="1"%s /> %s</label>
+		<p class="description">%s</p>',
+		checked( $enabled, true, false ),
+		esc_html__( 'Permitir acceso sin autenticación al endpoint /wpar/v1/content', 'wp-agent-ready' ),
+		esc_html__( 'Si está desactivado, el endpoint devuelve HTTP 403 a cualquier petición. Útil para deshabilitar temporalmente el acceso de agentes externos sin desactivar el plugin.', 'wp-agent-ready' )
 	);
 }
 

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-21
+
+### Añadido
+- Opción **«Acceso público al endpoint»** en Ajustes › WP Agent Ready › Contenido: si se desactiva, `/wpar/v1/content` devuelve HTTP 403 a cualquier petición, independientemente de la visibilidad del sitio para buscadores
+
 ## [0.5.1] - 2026-06-21
 
 ### Corregido
