@@ -25,7 +25,7 @@ define( 'WPAR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPAR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAR_PLUGIN_FILE', __FILE__ );
 
-add_action( 'rest_api_init', 'wpar_bootstrap_rest' );
+add_action( 'rest_api_init', 'wpar_bootstrap_rest', 1 );
 add_action( 'init', 'wpar_bootstrap_rewrite' );
 
 /**
