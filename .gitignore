@@ -1,0 +1,32 @@
+# Dependencies
+vendor/
+node_modules/
+
+# Build artifacts
+dist/
+*.zip
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# PHP
+.phpunit.result.cache
+
+# Project planning docs (not part of the plugin)
+*.brief.md
+wp-agent-ready-brief.md

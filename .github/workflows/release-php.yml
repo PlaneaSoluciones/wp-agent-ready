@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create plugin ZIP
+        run: |
+          rsync -a \
+            --exclude='.git' --exclude='.github' --exclude='.githooks' --exclude='.claude' \
+            --exclude='dist' --exclude='vendor' \
+            --exclude='composer.json' --exclude='composer.lock' \
+            --exclude='phpcs.xml' --exclude='phpstan.neon' --exclude='.gitignore' \
+            . dist/wp-agent-ready/
+          cd dist && zip -r ../wp-agent-ready.zip wp-agent-ready/
+
+      - name: Extract release notes from CHANGELOG.md
+        run: |
+          VERSION="${{ github.ref_name }}"
+          VERSION="${VERSION#v}"
+          awk "/^## \[${VERSION}\]/{found=1; next} found && /^## /{exit} found{print}" CHANGELOG.md > NOTES.md
+          if [ ! -s NOTES.md ]; then
+            echo "No se encontró la sección ${VERSION} en CHANGELOG.md" && exit 1
+          fi
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --notes-file NOTES.md \
+            --attach wp-agent-ready.zip
