@@ -33,6 +33,7 @@ add_action( 'init', 'wpar_bootstrap_init' );
 add_action( 'rest_api_init', 'wpar_bootstrap_rest', 1 );
 
 register_activation_hook( WPAR_PLUGIN_FILE, 'wpar_on_activation' );
+register_deactivation_hook( WPAR_PLUGIN_FILE, 'wpar_on_deactivation' );
 
 /**
  * Load components needed on every request (admin, front-end, cron, REST).
@@ -55,10 +56,22 @@ function wpar_bootstrap_rest(): void {
 }
 
 /**
- * Generate the webhook API key on first activation if not already set.
+ * Generate the webhook API key and flush rewrite rules on first activation.
  */
 function wpar_on_activation(): void {
 	if ( '' === (string) get_option( 'wpar_webhook_key', '' ) ) {
 		update_option( 'wpar_webhook_key', wp_generate_password( 48, false ), false );
 	}
+
+	// Register discovery rewrite rules before flushing so they persist in the DB.
+	add_rewrite_rule( '^\.well-known/mcp\.json$', 'index.php?wpar_manifest=1', 'top' );
+	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'top' );
+	flush_rewrite_rules( false );
+}
+
+/**
+ * Flush rewrite rules on deactivation to remove WPAR's custom rules.
+ */
+function wpar_on_deactivation(): void {
+	flush_rewrite_rules( false );
 }
