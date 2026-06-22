@@ -12,6 +12,7 @@ add_action( 'admin_menu', 'wpar_add_settings_page' );
 add_action( 'admin_init', 'wpar_register_settings' );
 add_action( 'admin_enqueue_scripts', 'wpar_admin_enqueue_scripts' );
 add_action( 'wp_ajax_wpar_test_connection', 'wpar_ajax_test_connection' );
+add_action( 'wp_ajax_wpar_regenerate_key', 'wpar_ajax_regenerate_key' );
 add_filter( 'plugin_action_links_wp-agent-ready/wp-agent-ready.php', 'wpar_plugin_action_links' );
 
 /**
@@ -186,6 +187,7 @@ function wpar_admin_enqueue_scripts( string $hook_suffix ): void {
 		array(
 			'ajax_url'      => admin_url( 'admin-ajax.php' ),
 			'nonce'         => wp_create_nonce( 'wpar_test_connection' ),
+			'regen_nonce'   => wp_create_nonce( 'wpar_regenerate_key' ),
 			'test_btn_text' => __( 'Probar conexión', 'wp-agent-ready' ),
 			'testing_text'  => __( 'Probando…', 'wp-agent-ready' ),
 		)
@@ -201,10 +203,10 @@ function wpar_admin_enqueue_scripts( string $hook_suffix ): void {
  */
 function wpar_field_mcp_url(): void {
 	printf(
-		'<input type="url" id="wpar_mcp_url" name="wpar_mcp_url" value="%s" class="regular-text" placeholder="https://tu-mcp.example.com/webhook" />
+		'<input type="url" id="wpar_mcp_url" name="wpar_mcp_url" value="%s" class="regular-text" placeholder="https://mcp.ejemplo.com/webhook" />
 		<p class="description">%s</p>',
 		esc_url( (string) get_option( 'wpar_mcp_url', '' ) ),
-		esc_html__( 'Endpoint del servidor MCP que recibirá las notificaciones de cambio de contenido.', 'wp-agent-ready' )
+		esc_html__( 'Dirección del endpoint /webhook del servidor MCP. El plugin enviará aquí los avisos de publicación y actualización de contenido.', 'wp-agent-ready' )
 	);
 }
 
@@ -216,7 +218,7 @@ function wpar_field_mcp_secret(): void {
 		'<input type="text" id="wpar_mcp_secret" name="wpar_mcp_secret" value="%s" class="regular-text" autocomplete="off" />
 		<p class="description">%s</p>',
 		esc_attr( (string) get_option( 'wpar_mcp_secret', '' ) ),
-		esc_html__( 'Valor de WPAR_WEBHOOK_SECRET configurado en el servidor MCP. El plugin lo incluye en la cabecera X-WPAR-Secret al notificar cambios de contenido.', 'wp-agent-ready' )
+		esc_html__( 'Cópialo desde la variable WPAR_WEBHOOK_SECRET del .env del servidor MCP. El plugin lo envía en la cabecera X-WPAR-Secret al notificar cambios de contenido al MCP.', 'wp-agent-ready' )
 	);
 }
 
@@ -225,12 +227,14 @@ function wpar_field_mcp_secret(): void {
  */
 function wpar_field_webhook_key(): void {
 	printf(
-		'<input type="text" id="wpar_webhook_key" name="wpar_webhook_key" value="%s" class="regular-text" autocomplete="off" />
+		'<input type="text" id="wpar_webhook_key" name="wpar_webhook_key" value="%s" class="regular-text" autocomplete="off" readonly />
 		<button type="button" id="wpar-copy-key" class="button button-secondary" style="margin-left:6px">%s</button>
+		<button type="button" id="wpar-regenerate-key" class="button button-secondary" style="margin-left:4px">%s</button>
 		<p class="description">%s</p>',
 		esc_attr( (string) get_option( 'wpar_webhook_key', '' ) ),
 		esc_html__( 'Copiar', 'wp-agent-ready' ),
-		esc_html__( 'Clave Bearer que el servidor MCP debe enviar en la cabecera Authorization al llamar a /sync. Se genera automáticamente en la activación.', 'wp-agent-ready' )
+		esc_html__( 'Regenerar', 'wp-agent-ready' ),
+		esc_html__( 'Clave autogenerada que protege el endpoint /wp-json/wpar/v1/sync de este WordPress. Si un servicio externo (p.ej. el servidor MCP) necesita forzar el re-índice de un post concreto, deberá enviarla en la cabecera Authorization: Bearer.', 'wp-agent-ready' )
 	);
 }
 
@@ -446,6 +450,22 @@ function wpar_ajax_test_connection(): void {
 			)
 		);
 	}
+}
+
+/**
+ * AJAX handler: generate a new webhook API key and persist it.
+ */
+function wpar_ajax_regenerate_key(): void {
+	check_ajax_referer( 'wpar_regenerate_key', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permisos insuficientes.', 'wp-agent-ready' ) ) );
+	}
+
+	$new_key = wp_generate_password( 48, false );
+	update_option( 'wpar_webhook_key', $new_key, false );
+
+	wp_send_json_success( array( 'key' => $new_key ) );
 }
 
 // ---------------------------------------------------------------------------
