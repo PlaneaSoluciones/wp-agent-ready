@@ -66,6 +66,15 @@ function wpar_register_settings(): void {
 		'wpar_section_mcp'
 	);
 
+	register_setting( 'wpar_settings', 'wpar_mcp_secret', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+	add_settings_field(
+		'wpar_mcp_secret',
+		__( 'Secreto del webhook MCP', 'wp-agent-ready' ),
+		'wpar_field_mcp_secret',
+		'wpar-settings',
+		'wpar_section_mcp'
+	);
+
 	register_setting( 'wpar_settings', 'wpar_webhook_key', array( 'sanitize_callback' => 'sanitize_text_field' ) );
 	add_settings_field(
 		'wpar_webhook_key',
@@ -196,6 +205,18 @@ function wpar_field_mcp_url(): void {
 		<p class="description">%s</p>',
 		esc_url( (string) get_option( 'wpar_mcp_url', '' ) ),
 		esc_html__( 'Endpoint del servidor MCP que recibirá las notificaciones de cambio de contenido.', 'wp-agent-ready' )
+	);
+}
+
+/**
+ * Render the MCP webhook secret field (plugin → MCP auth).
+ */
+function wpar_field_mcp_secret(): void {
+	printf(
+		'<input type="text" id="wpar_mcp_secret" name="wpar_mcp_secret" value="%s" class="regular-text" autocomplete="off" />
+		<p class="description">%s</p>',
+		esc_attr( (string) get_option( 'wpar_mcp_secret', '' ) ),
+		esc_html__( 'Valor de WPAR_WEBHOOK_SECRET configurado en el servidor MCP. El plugin lo incluye en la cabecera X-WPAR-Secret al notificar cambios de contenido.', 'wp-agent-ready' )
 	);
 }
 
@@ -373,13 +394,18 @@ function wpar_ajax_test_connection(): void {
 		wp_send_json_error( array( 'message' => __( 'Configura primero la URL del servidor MCP.', 'wp-agent-ready' ) ) );
 	}
 
+	// Derive base URL from the configured webhook URL and test /health (GET, no auth).
+	$parsed   = wp_parse_url( $mcp_url );
+	$base_url = ( $parsed['scheme'] ?? 'https' ) . '://' . ( $parsed['host'] ?? '' );
+	if ( ! empty( $parsed['port'] ) ) {
+		$base_url .= ':' . $parsed['port'];
+	}
+	$health_url = rtrim( $base_url, '/' ) . '/health';
+
 	$response = wp_remote_get(
-		$mcp_url,
+		$health_url,
 		array(
 			'timeout' => 5,
-			'headers' => array(
-				'Authorization' => 'Bearer ' . (string) get_option( 'wpar_webhook_key', '' ),
-			),
 		)
 	);
 

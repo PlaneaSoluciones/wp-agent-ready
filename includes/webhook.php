@@ -190,7 +190,7 @@ function wpar_send_webhook_notification( int $post_id, string $action, int $atte
 		array(
 			'headers' => array(
 				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bearer ' . (string) get_option( 'wpar_webhook_key', '' ),
+				'X-WPAR-Secret' => (string) get_option( 'wpar_mcp_secret', '' ),
 			),
 			'body'    => $payload,
 			'timeout' => 5,
