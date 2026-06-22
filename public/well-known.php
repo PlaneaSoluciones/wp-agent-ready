@@ -103,7 +103,7 @@ function wpar_serve_manifest(): void {
  * @return array<string, mixed>
  */
 function wpar_build_manifest(): array {
-	$post_types = array_values( get_post_types( array( 'public' => true ) ) );
+	$post_types = array_values( (array) get_option( 'wpar_post_types', array( 'post', 'page' ) ) );
 
 	return array(
 		'name'             => get_bloginfo( 'name' ),
@@ -147,7 +147,7 @@ function wpar_build_llms_txt(): string {
 	$url         = home_url( '/' );
 	$endpoint    = rest_url( 'wpar/v1/content' );
 	$manifest    = home_url( '/.well-known/mcp.json' );
-	$post_types  = array_values( get_post_types( array( 'public' => true ) ) );
+	$post_types  = array_values( (array) get_option( 'wpar_post_types', array( 'post', 'page' ) ) );
 
 	$lines = array(
 		"# {$name}",

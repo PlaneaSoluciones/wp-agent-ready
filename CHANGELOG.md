@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.3] - 2026-06-22
+
+### Corregido
+- El manifest (`/wp-json/wpar/v1/manifest`) y el `llms.txt` ahora anuncian únicamente los tipos de contenido activados en los ajustes del plugin, en lugar de todos los tipos públicos registrados en WordPress. Esto evitaba que tipos de otros plugins (como `mailpoet_page`) aparecieran en el manifest aunque no estuvieran habilitados, causando errores 400 al intentar indexarlos.
+
 ## [0.7.2] - 2026-06-22
 
 ### Añadido
