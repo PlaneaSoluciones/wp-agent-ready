@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.5] - 2026-06-22
+
+### Añadido
+- Botón **Regenerar** en el campo API key del webhook: permite generar una nueva clave sin necesidad de reactivar el plugin.
+
+### Cambiado
+- Los tres campos de la sección «Conexión con servidor MCP» ahora incluyen descripciones que explican el origen y destino de cada valor (de qué variable del MCP copiarlo y en qué cabecera se usa).
+- El campo API key del webhook pasa a ser de solo lectura; su valor se gestiona mediante los botones Copiar y Regenerar.
+
 ## [0.7.4] - 2026-06-22
 
 ### Corregido
