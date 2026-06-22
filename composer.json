@@ -5,13 +5,13 @@
 	"license": "GPL-2.0-or-later",
 	"authors": [
 		{
-			"name": "Planea Soluciones Informáticas",
+			"name": "Planea Soluciones",
 			"email": "info@planeasoluciones.com",
 			"homepage": "https://planeasoluciones.com"
 		}
 	],
 	"require": {
-		"php": ">=8.4"
+		"php": ">=8.1"
 	},
 	"require-dev": {
 		"squizlabs/php_codesniffer": "^3.11",

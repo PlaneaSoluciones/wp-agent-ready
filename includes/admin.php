@@ -12,6 +12,25 @@ add_action( 'admin_menu', 'wpar_add_settings_page' );
 add_action( 'admin_init', 'wpar_register_settings' );
 add_action( 'admin_enqueue_scripts', 'wpar_admin_enqueue_scripts' );
 add_action( 'wp_ajax_wpar_test_connection', 'wpar_ajax_test_connection' );
+add_filter( 'plugin_action_links_wp-agent-ready/wp-agent-ready.php', 'wpar_plugin_action_links' );
+
+/**
+ * Add a Settings link in the plugin list table.
+ *
+ * @param string[] $links Existing action links.
+ * @return string[]
+ */
+function wpar_plugin_action_links( array $links ): array {
+	$settings_link = sprintf(
+		'<a href="%s">%s</a>',
+		esc_url( admin_url( 'options-general.php?page=wpar-settings' ) ),
+		esc_html__( 'Ajustes', 'wp-agent-ready' )
+	);
+
+	array_unshift( $links, $settings_link );
+
+	return $links;
+}
 
 /**
  * Register the plugin settings page under Settings menu.

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.2] - 2026-06-22
+
+### Añadido
+- Enlace directo a **Ajustes** en la fila del plugin dentro de la lista de plugins de WordPress
+
+### Cambiado
+- Nombre del autor actualizado a «Planea Soluciones» (nombre comercial)
+
 ## [0.7.1] - 2026-06-22
 
 ### Corregido
