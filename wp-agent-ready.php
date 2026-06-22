@@ -5,7 +5,7 @@
  * Description:       Exposes WordPress published content to AI agents and LLMs via a clean REST API.
  * Version:           0.7.0
  * Requires at least: 6.0
- * Requires PHP:      8.4
+ * Requires PHP:      8.1
  * Author:            Planea Soluciones Informáticas
  * Author URI:        https://planeasoluciones.com
  * License:           GPL-2.0-or-later
