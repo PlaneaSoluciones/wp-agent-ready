@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.4] - 2026-06-22
+
+### Corregido
+- Añadido campo **Secreto del webhook MCP** en los ajustes: el plugin ahora envía la cabecera `X-WPAR-Secret` al notificar cambios al servidor MCP, en lugar de `Authorization: Bearer`. Sin este valor los webhooks eran rechazados con 401.
+- La prueba de conexión comprueba ahora el endpoint `/health` del MCP (GET) en lugar de `/webhook` (solo POST), eliminando el falso error en el test.
+
 ## [0.7.3] - 2026-06-22
 
 ### Corregido
