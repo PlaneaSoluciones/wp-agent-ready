@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-06-22
+
+### Corregido
+- El requisito mínimo de PHP se ha bajado a 8.1, eliminando el bloqueo de instalación en servidores con PHP 8.1–8.3
+
 ## [0.7.0] - 2026-06-21
 
 ### Añadido
