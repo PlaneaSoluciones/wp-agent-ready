@@ -1,14 +1,13 @@
 # CLAUDE.md
 
 ## Qué es esto
-Plugin WordPress que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`.
+Plugin WordPress (v0.8.1) que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`. Instalado en producción en `planeasoluciones.com`.
 
 ## Comandos
 
 ```bash
-# Instalar dependencias de desarrollo
-# Nota: PHP local puede ser < 8.4; usar --ignore-platform-reqs para desarrollo local
-composer install --ignore-platform-reqs
+# Instalar dependencias de desarrollo (requiere PHP >= 8.1)
+composer install
 
 # Linting (PHPCS con WordPress Coding Standards)
 composer run lint
@@ -35,7 +34,10 @@ wp-agent-ready/
 │   ├── webhook.php      ← emite notificación en save_post; recibe POST /wpar/v1/sync
 │   └── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
 ├── public/
-│   └── well-known.php   ← rewrite rules para /.well-known/mcp.json y /llms.txt
+│   └── well-known.php   ← /.well-known/mcp.json (incluye mcp_server cuando está configurado) +
+│                           /llms.txt (solo si no existe fichero físico en ABSPATH) +
+│                           /wp-json/wpar/v1/manifest + robots.txt hints
+│                           Helper: wpar_get_mcp_base_url() → deriva base URL desde wpar_mcp_url
 ├── assets/
 │   └── js/admin.js      ← jQuery: probar conexión MCP y copiar API key
 └── languages/           ← text-domain: wp-agent-ready
@@ -56,15 +58,16 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 ```bash
 # 1. Actualizar CHANGELOG.md (mover [Unreleased] → [X.Y.Z] - YYYY-MM-DD)
 #    Añadir entrada = X.Y.Z en la sección == Changelog == de readme.txt
+#    Actualizar README.md si hay cambios relevantes de funcionalidad
 # 2. Bump versión en wp-agent-ready.php (cabecera + constante WPAR_VERSION)
 #    Bump Stable tag en readme.txt
 # 3. Verificar lint ANTES del commit (evita commits rotos)
 composer run check
-# 4. Commit de bump
-git add wp-agent-ready.php CHANGELOG.md readme.txt
+# 4. Commit de bump (changelog + versión + readme en el mismo commit)
+git add wp-agent-ready.php CHANGELOG.md readme.txt README.md
 git commit -m "chore: bump version to X.Y.Z"
 
-# 4. Tag y push (CI genera la Release automáticamente)
+# 5. Tag y push (CI genera la Release automáticamente)
 git tag vX.Y.Z && git push && git push --tags
 ```
 
@@ -73,8 +76,16 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 1 — CI/CD, estructura y convenciones
 - [x] FASE 2 — Endpoint REST principal (`/wp-json/wpar/v1/content`)
 - [x] FASE 3 — Webhook de sincronización
-- [x] FASE 4 — Discoverabilidad (llms.txt + mcp.json)
+- [x] FASE 4 — Discoverabilidad (`/.well-known/mcp.json` + `/llms.txt`)
 - [x] FASE 5 — Página de ajustes en admin
+- [x] FASE 6 — MCP server URL en manifest y llms.txt (v0.8.0)
+- [x] FASE 7 — llms.txt cooperativo: cede ante fichero físico de otro plugin (v0.8.1)
+
+## Notas técnicas
+
+- `/.well-known/mcp.json` incluye `mcp_server.url` y `mcp_server.manifest` solo cuando `wpar_mcp_url` está configurado en ajustes.
+- `/llms.txt` no se registra como rewrite rule si `file_exists(ABSPATH . 'llms.txt')`. Yoast SEO escribe un fichero físico → nuestro handler nunca compite con él.
+- `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
 
 ## Documentación operacional
 - **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/wp-agent-ready-plugin-wordpress-para-agentes-ia
