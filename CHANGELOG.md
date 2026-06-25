@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-06-25
+
+### Corregido
+- El plugin ya no registra la rewrite rule de `/llms.txt` cuando existe un fichero físico `llms.txt` en el raíz del sitio. Si otro plugin (Yoast SEO, Rank Math…) genera ese fichero en disco, el servidor web lo sirve directamente antes de que WordPress cargue — registrar la rule era ruido innecesario y podía confundir el diagnóstico de rutas. La comprobación es agnóstica de plugin y se evalúa en cada petición, por lo que si el fichero desaparece el comportamiento se restaura automáticamente sin reactivar el plugin.
+
 ## [0.8.0] - 2026-06-25
 
 ### Añadido

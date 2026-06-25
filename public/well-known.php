@@ -24,7 +24,14 @@ add_filter( 'robots_txt', 'wpar_append_to_robots_txt', 10, 2 );
  */
 function wpar_add_discovery_rewrite_rules(): void {
 	add_rewrite_rule( '^\.well-known/mcp\.json$', 'index.php?wpar_manifest=1', 'top' );
-	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'bottom' );
+
+	// Only register the llms.txt rewrite rule when no physical file exists at the
+	// document root. A static file is served directly by the web server (before
+	// WordPress loads), so our rule would never fire anyway — and skipping it
+	// avoids false entries in the rewrite table that could confuse debugging.
+	if ( ! file_exists( ABSPATH . 'llms.txt' ) ) {
+		add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'bottom' );
+	}
 }
 
 /**
