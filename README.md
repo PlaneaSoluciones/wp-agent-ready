@@ -8,8 +8,8 @@ WordPress plugin that exposes published content to AI agents and LLMs via a clea
 - Optional Yoast SEO integration (meta description, SEO title)
 - Basic rate limiting (60 req/hour per IP) via transients
 - Webhook receiver for re-indexing from an external MCP server
-- Generates `llms.txt` at the site root
-- Exposes `/.well-known/mcp.json` for discoverability
+- Exposes `/.well-known/mcp.json` for MCP discoverability (includes MCP server URL when configured)
+- Generates `/llms.txt` at the site root when no other plugin already provides one (cooperative: does not override physical files written by Yoast SEO, Rank Math, etc.)
 
 ## What it does NOT do
 
@@ -20,7 +20,7 @@ WordPress plugin that exposes published content to AI agents and LLMs via a clea
 ## Requirements
 
 - WordPress 6.0+
-- PHP 8.4+
+- PHP 8.1+
 
 ## Installation
 

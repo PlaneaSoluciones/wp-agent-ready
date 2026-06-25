@@ -22,7 +22,7 @@ WP Agent Ready makes your WordPress site readable by AI agents, LLMs, and extern
 * Rate limiting — configurable requests per hour per IP (default: 60)
 * Webhook emitter — notifies your MCP server on publish, update, or delete events
 * `POST /wp-json/wpar/v1/sync` — authenticated endpoint to trigger re-sync on demand
-* Discoverability — `/.well-known/mcp.json` manifest and `/llms.txt` for LLM agents
+* Discoverability — `/.well-known/mcp.json` manifest with MCP server URL, and `/llms.txt` when no other plugin already provides one
 * Admin settings page — configure MCP server URL, API key, allowed post types, rate limit, and access control
 * Public access toggle — disable the content endpoint independently of search engine visibility
 
@@ -51,6 +51,13 @@ Yes. Any public post type can be enabled from the settings page.
 By default nothing is deleted. If you want to remove all plugin data from the database, enable **Borrar datos al desinstalar** in **Settings › WP Agent Ready › Avanzado** before uninstalling.
 
 == Changelog ==
+
+= 0.8.1 =
+* Fixed: `/llms.txt` rewrite rule is no longer registered when a physical `llms.txt` file already exists at the document root. Plugins like Yoast SEO that write a static file are now detected automatically — no plugin-specific checks involved.
+
+= 0.8.0 =
+* Added: `/.well-known/mcp.json` and `/llms.txt` now include the MCP server URL and manifest URL when the MCP server is configured in settings.
+* Fixed: `WPAR_VERSION` constant was out of sync with the plugin header version.
 
 = 0.7.0 =
 * Added robots.txt integration: X-llms-txt and X-Content-API directives are automatically appended, improving AI crawler discoverability even when /llms.txt is managed by another plugin.
