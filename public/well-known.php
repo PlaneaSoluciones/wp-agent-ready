@@ -98,6 +98,26 @@ function wpar_serve_manifest(): void {
 }
 
 /**
+ * Derive the MCP server base URL (scheme://host[:port]) from the configured webhook URL.
+ *
+ * Returns an empty string when no MCP URL has been configured.
+ *
+ * @return string
+ */
+function wpar_get_mcp_base_url(): string {
+	$webhook_url = (string) get_option( 'wpar_mcp_url', '' );
+	if ( '' === $webhook_url ) {
+		return '';
+	}
+	$parsed = wp_parse_url( $webhook_url );
+	$base   = ( $parsed['scheme'] ?? 'https' ) . '://' . ( $parsed['host'] ?? '' );
+	if ( ! empty( $parsed['port'] ) ) {
+		$base .= ':' . $parsed['port'];
+	}
+	return rtrim( $base, '/' );
+}
+
+/**
  * Build the MCP manifest array.
  *
  * @return array<string, mixed>
@@ -105,7 +125,7 @@ function wpar_serve_manifest(): void {
 function wpar_build_manifest(): array {
 	$post_types = array_values( (array) get_option( 'wpar_post_types', array( 'post', 'page' ) ) );
 
-	return array(
+	$manifest = array(
 		'name'             => get_bloginfo( 'name' ),
 		'description'      => get_bloginfo( 'description' ),
 		'url'              => home_url( '/' ),
@@ -118,6 +138,16 @@ function wpar_build_manifest(): array {
 			'yoast_seo'  => defined( 'WPSEO_VERSION' ),
 		),
 	);
+
+	$mcp_base = wpar_get_mcp_base_url();
+	if ( '' !== $mcp_base ) {
+		$manifest['mcp_server'] = array(
+			'url'      => $mcp_base . '/mcp',
+			'manifest' => $mcp_base . '/manifest',
+		);
+	}
+
+	return $manifest;
 }
 
 /**
@@ -196,6 +226,20 @@ function wpar_build_llms_txt(): string {
 			"- **MCP Manifest**: {$manifest}",
 		)
 	);
+
+	$mcp_base = wpar_get_mcp_base_url();
+	if ( '' !== $mcp_base ) {
+		$lines = array_merge(
+			$lines,
+			array(
+				'',
+				'## MCP Server',
+				'',
+				"- **MCP Endpoint**: {$mcp_base}/mcp",
+				"- **Manifest**: {$mcp_base}/manifest",
+			)
+		);
+	}
 
 	return implode( "\n", $lines ) . "\n";
 }

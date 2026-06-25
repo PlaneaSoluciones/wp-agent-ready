@@ -3,7 +3,7 @@ Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 0.7.5
+Stable tag: 0.8.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html

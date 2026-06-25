@@ -399,12 +399,7 @@ function wpar_ajax_test_connection(): void {
 	}
 
 	// Derive base URL from the configured webhook URL and test /health (GET, no auth).
-	$parsed   = wp_parse_url( $mcp_url );
-	$base_url = ( $parsed['scheme'] ?? 'https' ) . '://' . ( $parsed['host'] ?? '' );
-	if ( ! empty( $parsed['port'] ) ) {
-		$base_url .= ':' . $parsed['port'];
-	}
-	$health_url = rtrim( $base_url, '/' ) . '/health';
+	$health_url = wpar_get_mcp_base_url() . '/health';
 
 	$response = wp_remote_get(
 		$health_url,

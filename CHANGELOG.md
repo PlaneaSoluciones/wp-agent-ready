@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-06-25
+
+### Añadido
+- El manifest (`/.well-known/mcp.json` y `/wp-json/wpar/v1/manifest`) incluye ahora un campo `mcp_server` con la URL del endpoint MCP y la URL del manifest cuando la URL del servidor MCP está configurada en los ajustes. Esto permite que los agentes de IA descubran el servidor MCP directamente desde el sitio WordPress.
+- El archivo `/llms.txt` incluye ahora una sección **MCP Server** con el endpoint y el manifest del servidor MCP cuando está configurado.
+
+### Corregido
+- La constante `WPAR_VERSION` estaba desincronizada (`0.7.3`) respecto a la versión real del plugin (`0.7.5`). Ambos valores se alinean ahora con el número de versión correcto.
+
 ## [0.7.5] - 2026-06-22
 
 ### Añadido
