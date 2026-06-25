@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-06-25
+
+### Corregido
+- `/llms.txt` ya no devuelve 404 cuando otro plugin (Yoast SEO, Rank Math…) gestionaba ese fichero y luego lo elimina. La rewrite rule se registra siempre en la base de datos; si existe un fichero físico en el raíz, el servidor web lo sirve antes de que WordPress cargue (la regla no dispara, es inocua). Si el fichero desaparece, la regla empieza a funcionar de inmediato sin intervención manual.
+- Las instalaciones existentes reciben las reglas de rewrite corregidas automáticamente al actualizar, sin necesidad de desactivar y reactivar el plugin: se hace un `flush_rewrite_rules()` automático la primera vez que se carga la nueva versión.
+
 ## [0.9.0] - 2026-06-25
 
 ### Añadido
