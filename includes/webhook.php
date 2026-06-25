@@ -204,6 +204,20 @@ function wpar_send_webhook_notification( int $post_id, string $action, int $atte
 		$failed = ! is_int( $code ) || $code >= 300;
 	}
 
+	if ( 1 === $attempt ) {
+		wpar_log_activity(
+			'webhook_out',
+			array(
+				'post_id'    => $post_id,
+				'post_title' => $post->post_title,
+				'action'     => $action,
+				'status'     => is_wp_error( $response )
+					? $response->get_error_message()
+					: wp_remote_retrieve_response_code( $response ),
+			)
+		);
+	}
+
 	if ( $failed && $attempt < 3 ) {
 		// Exponential backoff: attempt 1 → 5 min, attempt 2 → 15 min.
 		$delay = (int) ( 5 * MINUTE_IN_SECONDS * ( 3 ** ( $attempt - 1 ) ) );

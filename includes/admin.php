@@ -13,6 +13,8 @@ add_action( 'admin_init', 'wpar_register_settings' );
 add_action( 'admin_enqueue_scripts', 'wpar_admin_enqueue_scripts' );
 add_action( 'wp_ajax_wpar_test_connection', 'wpar_ajax_test_connection' );
 add_action( 'wp_ajax_wpar_regenerate_key', 'wpar_ajax_regenerate_key' );
+add_action( 'wp_ajax_wpar_clear_log', 'wpar_ajax_clear_activity_log' );
+add_action( 'wp_ajax_wpar_fetch_mcp_stats', 'wpar_ajax_fetch_mcp_stats' );
 add_filter( 'plugin_action_links_wp-agent-ready/wp-agent-ready.php', 'wpar_plugin_action_links' );
 
 /**
@@ -185,11 +187,13 @@ function wpar_admin_enqueue_scripts( string $hook_suffix ): void {
 		'wpar-admin',
 		'wpar_admin',
 		array(
-			'ajax_url'      => admin_url( 'admin-ajax.php' ),
-			'nonce'         => wp_create_nonce( 'wpar_test_connection' ),
-			'regen_nonce'   => wp_create_nonce( 'wpar_regenerate_key' ),
-			'test_btn_text' => __( 'Probar conexión', 'wp-agent-ready' ),
-			'testing_text'  => __( 'Probando…', 'wp-agent-ready' ),
+			'ajax_url'          => admin_url( 'admin-ajax.php' ),
+			'nonce'             => wp_create_nonce( 'wpar_test_connection' ),
+			'regen_nonce'       => wp_create_nonce( 'wpar_regenerate_key' ),
+			'clear_log_nonce'   => wp_create_nonce( 'wpar_clear_log' ),
+			'fetch_stats_nonce' => wp_create_nonce( 'wpar_fetch_mcp_stats' ),
+			'test_btn_text'     => __( 'Probar conexión', 'wp-agent-ready' ),
+			'testing_text'      => __( 'Probando…', 'wp-agent-ready' ),
 		)
 	);
 }
@@ -448,6 +452,38 @@ function wpar_ajax_test_connection(): void {
 }
 
 /**
+ * AJAX handler: fetch stats from the MCP /health endpoint.
+ */
+function wpar_ajax_fetch_mcp_stats(): void {
+	check_ajax_referer( 'wpar_fetch_mcp_stats', 'nonce' );
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( array( 'message' => __( 'Permisos insuficientes.', 'wp-agent-ready' ) ) );
+	}
+
+	$base_url = wpar_get_mcp_base_url();
+
+	if ( '' === $base_url ) {
+		wp_send_json_error( array( 'message' => __( 'URL del servidor MCP no configurada.', 'wp-agent-ready' ) ) );
+	}
+
+	$response = wp_remote_get( $base_url . '/health', array( 'timeout' => 5 ) );
+
+	if ( is_wp_error( $response ) ) {
+		wp_send_json_error( array( 'message' => $response->get_error_message() ) );
+	}
+
+	$body = wp_remote_retrieve_body( $response );
+	$data = json_decode( $body, true );
+
+	if ( ! is_array( $data ) ) {
+		wp_send_json_error( array( 'message' => __( 'Respuesta inesperada del servidor MCP.', 'wp-agent-ready' ) ) );
+	}
+
+	wp_send_json_success( $data );
+}
+
+/**
  * AJAX handler: generate a new webhook API key and persist it.
  */
 function wpar_ajax_regenerate_key(): void {
@@ -484,6 +520,13 @@ function wpar_render_settings_page(): void {
 			submit_button( __( 'Guardar cambios', 'wp-agent-ready' ) );
 			?>
 		</form>
+
+		<?php wpar_render_activity_log(); ?>
+
+		<h2><?php esc_html_e( 'Estado del MCP', 'wp-agent-ready' ); ?></h2>
+		<div id="wpar-mcp-stats">
+			<p class="description"><?php esc_html_e( 'Cargando…', 'wp-agent-ready' ); ?></p>
+		</div>
 	</div>
 	<?php
 }

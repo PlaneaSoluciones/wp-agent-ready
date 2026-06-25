@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-06-25
+
+### Añadido
+- **Log de actividad de sincronización**: la página de ajustes incluye ahora una sección «Actividad reciente» con una tabla de los últimos 100 webhooks enviados al servidor MCP, mostrando fecha, post afectado, acción y código de respuesta HTTP. Permite verificar de un vistazo que la sincronización entre el plugin y el MCP funciona correctamente.
+- **Estado del MCP en el admin**: nueva sección «Estado del MCP» que consulta el endpoint `/health` del servidor MCP al cargar la página y muestra el número de páginas indexadas, la fecha del último indexado, el total de consultas recibidas de agentes y el detalle por herramienta (búsquedas, páginas, recientes).
+- **Contadores de consultas en el MCP** (servidor v0.4.0): cada llamada a `search_content`, `get_page`, `list_recent` y `get_site_info` incrementa un contador persistente en SQLite. El endpoint `/health` expone `total_queries`, `by_tool` y `last_query_at`.
+
 ## [0.8.1] - 2026-06-25
 
 ### Corregido

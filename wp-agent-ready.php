@@ -3,7 +3,7 @@
  * Plugin Name:       WP Agent Ready
  * Plugin URI:        https://github.com/PlaneaSoluciones/wp-agent-ready
  * Description:       Exposes WordPress published content to AI agents and LLMs via a clean REST API.
- * Version:           0.8.1
+ * Version:           0.9.0
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Author:            Planea Soluciones
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPAR_VERSION', '0.8.1' );
+define( 'WPAR_VERSION', '0.9.0' );
 define( 'WPAR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPAR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAR_PLUGIN_FILE', __FILE__ );
@@ -52,6 +52,7 @@ function wpar_maybe_bootstrap_admin(): void {
  * Load components needed on every request (admin, front-end, cron, REST).
  */
 function wpar_bootstrap_init(): void {
+	require_once WPAR_PLUGIN_DIR . 'includes/activity-log.php';
 	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
 	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
 }

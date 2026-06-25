@@ -3,7 +3,7 @@ Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 0.8.1
+Stable tag: 0.9.0
 Requires PHP: 8.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -51,6 +51,11 @@ Yes. Any public post type can be enabled from the settings page.
 By default nothing is deleted. If you want to remove all plugin data from the database, enable **Borrar datos al desinstalar** in **Settings › WP Agent Ready › Avanzado** before uninstalling.
 
 == Changelog ==
+
+= 0.9.0 =
+* Added: activity log in the admin settings page showing the last 100 outgoing webhooks with date, post, action, and HTTP status. Makes it easy to confirm that sync between the plugin and MCP is working.
+* Added: MCP status section in the admin page showing indexed pages, last indexed date, total agent queries, and breakdown by tool (searches, page reads, list recent, site info).
+* Added: persistent query counters in the MCP server (v0.4.0) incremented on each tool call and exposed via `/health`.
 
 = 0.8.1 =
 * Fixed: `/llms.txt` rewrite rule is no longer registered when a physical `llms.txt` file already exists at the document root. Plugins like Yoast SEO that write a static file are now detected automatically — no plugin-specific checks involved.
