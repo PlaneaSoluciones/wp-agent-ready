@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-06-27
+
+### Corregido
+- `/llms.txt` ya no recibe un redirect 301 a `/llms.txt/` cuando la estructura de permalinks usa trailing slash. El handler de discoverabilidad ahora se ejecuta antes que el mecanismo de redirect canonical de WordPress, sirviendo la respuesta directamente sin pasar por ese filtro.
+
 ## [0.9.1] - 2026-06-25
 
 ### Corregido
