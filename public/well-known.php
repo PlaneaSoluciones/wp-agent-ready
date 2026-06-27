@@ -30,7 +30,7 @@ function wpar_add_discovery_rewrite_rules(): void {
 	// triggered (harmless entry in the rewrite table). If the file disappears
 	// later (e.g. Yoast disables its llms.txt generation), the rule is already
 	// present and starts working immediately without requiring a manual flush.
-	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'bottom' );
+	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'top' );
 }
 
 /**
