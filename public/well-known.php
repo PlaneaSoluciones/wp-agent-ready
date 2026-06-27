@@ -13,7 +13,7 @@
 wpar_add_discovery_rewrite_rules();
 
 add_filter( 'query_vars', 'wpar_discovery_query_vars' );
-add_action( 'template_redirect', 'wpar_handle_discovery_requests' );
+add_action( 'template_redirect', 'wpar_handle_discovery_requests', 1 );
 add_action( 'rest_api_init', 'wpar_register_manifest_route' );
 add_filter( 'robots_txt', 'wpar_append_to_robots_txt', 10, 2 );
 
