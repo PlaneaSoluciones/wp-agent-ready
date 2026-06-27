@@ -3,7 +3,7 @@
  * Plugin Name:       WP Agent Ready
  * Plugin URI:        https://github.com/PlaneaSoluciones/wp-agent-ready
  * Description:       Exposes WordPress published content to AI agents and LLMs via a clean REST API.
- * Version:           0.9.3
+ * Version:           0.9.4
  * Requires at least: 6.0
  * Requires PHP:      8.1
  * Author:            Planea Soluciones
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPAR_VERSION', '0.9.3' );
+define( 'WPAR_VERSION', '0.9.4' );
 define( 'WPAR_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WPAR_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WPAR_PLUGIN_FILE', __FILE__ );
@@ -56,10 +56,11 @@ function wpar_bootstrap_init(): void {
 	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
 	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
 
-	// Flush rewrite rules once whenever the plugin version changes so that
-	// existing installs pick up new or corrected rules without manual intervention.
+	// Hard-flush rewrite rules once whenever the plugin version changes so that
+	// existing installs pick up new or corrected rules in both the DB and .htaccess
+	// without requiring manual intervention from the site administrator.
 	if ( get_option( 'wpar_version' ) !== WPAR_VERSION ) {
-		flush_rewrite_rules( false );
+		flush_rewrite_rules();
 		update_option( 'wpar_version', WPAR_VERSION, false );
 	}
 }
@@ -87,7 +88,7 @@ function wpar_on_activation(): void {
 	// Register discovery rewrite rules before flushing so they persist in the DB.
 	add_rewrite_rule( '^\.well-known/mcp\.json$', 'index.php?wpar_manifest=1', 'top' );
 	add_rewrite_rule( '^llms\.txt$', 'index.php?wpar_llms_txt=1', 'top' );
-	flush_rewrite_rules( false );
+	flush_rewrite_rules();
 }
 
 /**

@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-06-27
+
+### Corregido
+- Al actualizar el plugin, el flush de reglas de rewrite ahora actualiza también el `.htaccess` (hard flush), no solo la base de datos. Esto elimina la necesidad de que el administrador visite manualmente Ajustes → Enlaces permanentes tras cada actualización.
+
 ## [0.9.3] - 2026-06-27
 
 ### Corregido
