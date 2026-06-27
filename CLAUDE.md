@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 ## Qué es esto
-Plugin WordPress (v0.9.1) que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`. Instalado en producción en `planeasoluciones.com`.
+Plugin WordPress (v0.9.2) que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`. Instalado en producción en `planeasoluciones.com`.
 
 ## Comandos
 
@@ -81,11 +81,13 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 6 — MCP server URL en manifest y llms.txt (v0.8.0)
 - [x] FASE 7 — llms.txt cooperativo: cede ante fichero físico de otro plugin (v0.8.1)
 - [x] FASE 8 — Fix 404 en llms.txt al desaparecer el fichero físico + auto-flush por versión (v0.9.1)
+- [x] FASE 9 — Fix redirect 301 trailing slash en /llms.txt (v0.9.2)
 
 ## Notas técnicas
 
 - `/.well-known/mcp.json` incluye `mcp_server.url` y `mcp_server.manifest` solo cuando `wpar_mcp_url` está configurado en ajustes.
 - `/llms.txt`: la rewrite rule se registra **siempre** en la BD. Si existe un fichero físico en ABSPATH, el servidor web lo sirve antes de que WordPress cargue (la regla nunca dispara). Si el fichero desaparece, la regla empieza a funcionar de inmediato sin reactivar el plugin.
+- `/llms.txt` (trailing slash): `wpar_handle_discovery_requests` está hookeado en `template_redirect` con prioridad 1 (antes que `redirect_canonical` de WP core, que va en prioridad 10). Esto evita que WordPress emita un 301 a `/llms.txt/` cuando el permalink structure usa trailing slash.
 - `wpar_bootstrap_init()` hace `flush_rewrite_rules()` automático la primera vez que se carga una nueva versión (compara `wpar_version` en BD con `WPAR_VERSION`).
 - `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
 
