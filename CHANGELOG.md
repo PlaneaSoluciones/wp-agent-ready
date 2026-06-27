@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-06-27
+
+### Corregido
+- `/llms.txt` ya no devuelve 404 en sitios donde las reglas de rewrite de páginas de WordPress tenían prioridad sobre la regla del plugin. La rewrite rule pasa a registrarse con prioridad `top`, igual que `/.well-known/mcp.json`, evitando que WordPress intente resolver `llms.txt` como un slug de página inexistente.
+
 ## [0.9.2] - 2026-06-27
 
 ### Corregido
