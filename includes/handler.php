@@ -57,6 +57,8 @@ function wpar_handle_content_request( WP_REST_Request $request ): WP_REST_Respon
 	$response->header( 'X-WP-Total', (string) $query->found_posts );
 	$response->header( 'X-WP-TotalPages', (string) $query->max_num_pages );
 
+	update_option( 'wpar_last_content_request', gmdate( 'c' ), false );
+
 	return $response;
 }
 

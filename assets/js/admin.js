@@ -146,6 +146,9 @@ jQuery( function ( $ ) {
 				}
 
 				var d = response.data;
+				var lastContentRequest = d.last_content_request
+					? new Date( d.last_content_request ).toLocaleString( 'es-ES' )
+					: '—';
 				var lastIndexed = d.last_indexed
 					? new Date( d.last_indexed ).toLocaleString( 'es-ES' )
 					: '—';
@@ -174,6 +177,7 @@ jQuery( function ( $ ) {
 				$statsContainer.html(
 					'<table class="widefat striped">' +
 					'<tr><th>Versión MCP</th><td>' + ( d.version || '—' ) + '</td></tr>' +
+					'<tr><th>Última conexión MCP → plugin</th><td>' + lastContentRequest + '</td></tr>' +
 					'<tr><th>Páginas indexadas</th><td>' + ( d.total_pages !== undefined ? d.total_pages : '—' ) + '</td></tr>' +
 					'<tr><th>Último indexado</th><td>' + lastIndexed + '</td></tr>' +
 					'<tr><th>Consultas de agentes</th><td>' + ( d.total_queries || 0 ) + byToolStr + '</td></tr>' +

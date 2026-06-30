@@ -480,6 +480,8 @@ function wpar_ajax_fetch_mcp_stats(): void {
 		wp_send_json_error( array( 'message' => __( 'Respuesta inesperada del servidor MCP.', 'wp-agent-ready' ) ) );
 	}
 
+	$data['last_content_request'] = (string) get_option( 'wpar_last_content_request', '' );
+
 	wp_send_json_success( $data );
 }
 
