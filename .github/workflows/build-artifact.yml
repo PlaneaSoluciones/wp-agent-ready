@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set short SHA
         run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> "$GITHUB_ENV"
@@ -28,7 +28,7 @@ jobs:
           cd dist && zip -r ../wp-agent-ready.zip wp-agent-ready/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: wp-agent-ready-${{ env.SHORT_SHA }}
           path: wp-agent-ready.zip
