@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.5] - 2026-07-06
+
+### Corregido
+- El endpoint `/wpar/v1/content` ignoraba el parámetro `post_id`: tanto el webhook de publicación/actualización como la reconciliación nocturna del servidor MCP recibían siempre el último contenido publicado del tipo por defecto en lugar del post solicitado, por lo que páginas o tipos de contenido personalizados podían no reindexarse correctamente. Una petición con `post_id` localiza ahora el post exacto sin importar su tipo.
+
 ## [0.9.4] - 2026-06-27
 
 ### Corregido
