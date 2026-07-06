@@ -52,6 +52,11 @@ function wpar_content_permission_callback(): true|WP_Error {
  */
 function wpar_content_route_args(): array {
 	return array(
+		'post_id'        => array(
+			'type'              => 'integer',
+			'minimum'           => 1,
+			'sanitize_callback' => 'absint',
+		),
 		'per_page'       => array(
 			'type'              => 'integer',
 			'default'           => 10,

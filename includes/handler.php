@@ -19,13 +19,13 @@ function wpar_handle_content_request( WP_REST_Request $request ): WP_REST_Respon
 		return $rate_check;
 	}
 
+	$post_id        = absint( $request->get_param( 'post_id' ) );
 	$per_page       = absint( $request->get_param( 'per_page' ) );
 	$page           = absint( $request->get_param( 'page' ) );
 	$post_type      = (string) $request->get_param( 'post_type' );
 	$modified_after = (string) $request->get_param( 'modified_after' );
 
 	$args = array(
-		'post_type'      => '' !== $post_type ? $post_type : 'post',
 		'post_status'    => 'publish',
 		'posts_per_page' => $per_page > 0 ? $per_page : 10,
 		'paged'          => $page > 0 ? $page : 1,
@@ -34,13 +34,22 @@ function wpar_handle_content_request( WP_REST_Request $request ): WP_REST_Respon
 		'no_found_rows'  => false,
 	);
 
-	if ( '' !== $modified_after ) {
-		$args['date_query'] = array(
-			array(
-				'column' => 'post_modified_gmt',
-				'after'  => $modified_after,
-			),
-		);
+	if ( $post_id > 0 ) {
+		// Direct lookup by ID (webhook/reconcile re-index): bypass post_type filtering,
+		// the caller already knows this specific post should be indexed.
+		$args['p']         = $post_id;
+		$args['post_type'] = 'any';
+	} else {
+		$args['post_type'] = '' !== $post_type ? $post_type : 'post';
+
+		if ( '' !== $modified_after ) {
+			$args['date_query'] = array(
+				array(
+					'column' => 'post_modified_gmt',
+					'after'  => $modified_after,
+				),
+			);
+		}
 	}
 
 	$query = new WP_Query( $args );
