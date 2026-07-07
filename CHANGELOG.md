@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-07-07
+
+### Añadido
+- Nuevo endpoint `GET /wp-json/wpar/v1/ping`, usado por el servidor MCP como heartbeat de conectividad en cada ciclo de reconciliación nocturna, independiente de si hay contenido para reindexar. La fila "Última conexión MCP → plugin" del panel de administración ahora refleja este heartbeat en lugar de la última petición de contenido, con un indicador visual (✓/⚠) según su antigüedad. La fecha de la última petición de contenido se muestra ahora por separado como "Última petición de contenido".
+
 ## [0.9.5] - 2026-07-06
 
 ### Corregido
