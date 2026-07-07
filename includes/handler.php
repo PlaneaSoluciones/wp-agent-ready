@@ -72,6 +72,29 @@ function wpar_handle_content_request( WP_REST_Request $request ): WP_REST_Respon
 }
 
 /**
+ * Handle GET /wp-json/wpar/v1/ping.
+ *
+ * Lightweight connectivity heartbeat, called by the MCP server on every nightly
+ * reconciliation cycle regardless of whether any content changed. Decoupled from
+ * /content so "last connection" reflects that the MCP↔plugin link is alive, not
+ * just that content happened to be re-fetched.
+ *
+ * @return WP_REST_Response JSON response confirming the heartbeat.
+ */
+function wpar_handle_ping_request(): WP_REST_Response {
+	$now = gmdate( 'c' );
+	update_option( 'wpar_last_mcp_ping', $now, false );
+
+	return new WP_REST_Response(
+		array(
+			'status' => 'ok',
+			'time'   => $now,
+		),
+		200
+	);
+}
+
+/**
  * Format a single post into the API response structure.
  *
  * @param WP_Post $post Post object.

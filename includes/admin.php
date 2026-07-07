@@ -481,6 +481,7 @@ function wpar_ajax_fetch_mcp_stats(): void {
 	}
 
 	$data['last_content_request'] = (string) get_option( 'wpar_last_content_request', '' );
+	$data['last_mcp_ping']        = (string) get_option( 'wpar_last_mcp_ping', '' );
 
 	wp_send_json_success( $data );
 }

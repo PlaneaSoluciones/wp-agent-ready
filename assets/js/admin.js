@@ -156,6 +156,17 @@ jQuery( function ( $ ) {
 					? new Date( d.last_query_at ).toLocaleString( 'es-ES' )
 					: '—';
 
+				// Heartbeat health: the MCP pings this endpoint on every nightly
+				// reconcile cycle (~daily by default). Flag it as stale past 1.5x
+				// that cadence so a broken connection is visible at a glance.
+				var PING_STALE_THRESHOLD_MS = 36 * 60 * 60 * 1000;
+				var lastMcpPingDate = d.last_mcp_ping ? new Date( d.last_mcp_ping ) : null;
+				var lastMcpPing     = lastMcpPingDate ? lastMcpPingDate.toLocaleString( 'es-ES' ) : '—';
+				var pingIsStale     = ! lastMcpPingDate || ( Date.now() - lastMcpPingDate.getTime() ) > PING_STALE_THRESHOLD_MS;
+				var pingIndicator   = pingIsStale
+					? '<span style="color:#dc3232;" title="Sin confirmación reciente">&#9888;</span> '
+					: '<span style="color:#46b450;" title="Conexión confirmada">&#10003;</span> ';
+
 				var byToolParts = [];
 				if ( d.by_tool ) {
 					if ( d.by_tool.search_content ) {
@@ -177,7 +188,8 @@ jQuery( function ( $ ) {
 				$statsContainer.html(
 					'<table class="widefat striped">' +
 					'<tr><th>Versión MCP</th><td>' + ( d.version || '—' ) + '</td></tr>' +
-					'<tr><th>Última conexión MCP → plugin</th><td>' + lastContentRequest + '</td></tr>' +
+					'<tr><th>Última conexión MCP → plugin</th><td>' + pingIndicator + lastMcpPing + '</td></tr>' +
+					'<tr><th>Última petición de contenido</th><td>' + lastContentRequest + '</td></tr>' +
 					'<tr><th>Páginas indexadas</th><td>' + ( d.total_pages !== undefined ? d.total_pages : '—' ) + '</td></tr>' +
 					'<tr><th>Último indexado</th><td>' + lastIndexed + '</td></tr>' +
 					'<tr><th>Consultas de agentes</th><td>' + ( d.total_queries || 0 ) + byToolStr + '</td></tr>' +

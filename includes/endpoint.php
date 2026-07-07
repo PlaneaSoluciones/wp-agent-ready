@@ -24,6 +24,16 @@ function wpar_register_routes(): void {
 			'args'                => wpar_content_route_args(),
 		)
 	);
+
+	register_rest_route(
+		'wpar/v1',
+		'/ping',
+		array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => 'wpar_handle_ping_request',
+			'permission_callback' => 'wpar_content_permission_callback',
+		)
+	);
 }
 
 /**
