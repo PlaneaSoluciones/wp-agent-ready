@@ -32,7 +32,11 @@ wp-agent-ready/
 │   ├── yoast.php        ← lee _yoast_wpseo_metadesc/_title si Yoast activo
 │   ├── rate-limit.php   ← sliding window configurable (wpar_rate_limit) req/hora por IP
 │   ├── webhook.php      ← emite notificación en save_post; recibe POST /wpar/v1/sync
-│   └── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
+│   ├── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
+│   ├── updater.php      ← auto-updater desde GitHub Releases (plugin-update-checker)
+│   └── lib/
+│       └── plugin-update-checker/  ← librería de terceros vendorizada (YahnisElsts, MIT, tag v5.7)
+│                           excluida de PHPCS/PHPStan; no editar a mano
 ├── public/
 │   └── well-known.php   ← /.well-known/mcp.json (incluye mcp_server cuando está configurado) +
 │                           /llms.txt (solo si no existe fichero físico en ABSPATH) +
@@ -51,7 +55,7 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 
 - `pr-title-lint.yml` — valida Conventional Commits en PRs
 - `lint-php.yml` — PHP syntax check + PHPCS + PHPStan en push/PR
-- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`
+- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`; si están configurados los secrets `SFTP_HOST`/`SFTP_USERNAME`/`SFTP_PASSWORD`, despliega también por FTPS a `wp-content/plugins/wp-agent-ready/` en producción (mirror: borra en remoto lo ausente en el ZIP)
 
 ## Releases
 
@@ -82,6 +86,7 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 7 — llms.txt cooperativo: cede ante fichero físico de otro plugin (v0.8.1)
 - [x] FASE 8 — Fix 404 en llms.txt al desaparecer el fichero físico + auto-flush por versión (v0.9.1)
 - [x] FASE 9 — Fix redirect 301 trailing slash en /llms.txt (v0.9.2)
+- [x] FASE 10 — Auto-updater desde GitHub Releases + deploy FTPS en release-php.yml
 
 ## Notas técnicas
 
@@ -90,6 +95,7 @@ git tag vX.Y.Z && git push && git push --tags
 - `/llms.txt` (trailing slash): `wpar_handle_discovery_requests` está hookeado en `template_redirect` con prioridad 1 (antes que `redirect_canonical` de WP core, que va en prioridad 10). Esto evita que WordPress emita un 301 a `/llms.txt/` cuando el permalink structure usa trailing slash.
 - `wpar_bootstrap_init()` hace `flush_rewrite_rules()` automático la primera vez que se carga una nueva versión (compara `wpar_version` en BD con `WPAR_VERSION`).
 - `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
+- `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que incluiría `vendor/`, `.github/` y demás ficheros de desarrollo.
 
 ## Documentación operacional
 - **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/wp-agent-ready-plugin-wordpress-para-agentes-ia

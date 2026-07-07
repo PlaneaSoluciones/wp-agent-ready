@@ -9,5 +9,17 @@ parameters:
         - vendor
         - node_modules (?)
         - dist (?)
+        - includes/lib
+    scanDirectories:
+        - includes/lib
     bootstrapFiles:
         - phpstan-bootstrap.php
+    # PucFactory (includes/lib/plugin-update-checker) declares its class inside an
+    # `if ( !class_exists(...) ): ... endif;` guard for cross-version compatibility.
+    # PHPStan's static reflection doesn't resolve conditionally-declared classes, even
+    # via scanDirectories — the class genuinely exists at runtime, this is a known
+    # PHPStan limitation with this pattern, not a bug in our code.
+    ignoreErrors:
+        -
+            message: '#Call to static method buildUpdateChecker\(\) on an unknown class YahnisElsts\\PluginUpdateChecker\\v5\\PucFactory#'
+            path: includes/updater.php

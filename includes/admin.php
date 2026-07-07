@@ -163,6 +163,23 @@ function wpar_register_settings(): void {
 		'wpar-settings',
 		'wpar_section_advanced'
 	);
+
+	// Section: Updates.
+	add_settings_section(
+		'wpar_section_updates',
+		__( 'Actualizaciones', 'wp-agent-ready' ),
+		'__return_false',
+		'wpar-settings'
+	);
+
+	register_setting( 'wpar_settings', 'wpar_github_token', array( 'sanitize_callback' => 'sanitize_text_field' ) );
+	add_settings_field(
+		'wpar_github_token',
+		__( 'Token de GitHub (opcional)', 'wp-agent-ready' ),
+		'wpar_field_github_token',
+		'wpar-settings',
+		'wpar_section_updates'
+	);
 }
 
 /**
@@ -326,6 +343,18 @@ function wpar_field_llms_txt_enabled(): void {
 		$enabled ? ' checked' : '',
 		esc_html__( 'Servir /llms.txt en este sitio', 'wp-agent-ready' ),
 		esc_html__( 'Si está activo, la ruta /llms.txt devolverá una descripción del sitio y la API para consumo por LLMs.', 'wp-agent-ready' )
+	);
+}
+
+/**
+ * Render the GitHub token field for the update checker.
+ */
+function wpar_field_github_token(): void {
+	printf(
+		'<input type="text" id="wpar_github_token" name="wpar_github_token" value="%s" class="regular-text" autocomplete="off" />
+		<p class="description">%s</p>',
+		esc_attr( (string) get_option( 'wpar_github_token', '' ) ),
+		esc_html__( 'Opcional. El plugin comprueba nuevas versiones en el repositorio público de GitHub sin necesidad de token. Configúralo solo si se alcanza el límite de peticiones anónimas de la API de GitHub (60/hora).', 'wp-agent-ready' )
 	);
 }
 

@@ -2,6 +2,11 @@
 vendor/
 node_modules/
 
+# Third-party library vendorized on purpose (includes/lib/plugin-update-checker/vendor/
+# ships Parsedown, needed at runtime) — must not be swallowed by the vendor/ rule above.
+!includes/lib/
+!includes/lib/**
+
 # Build artifacts
 dist/
 *.zip

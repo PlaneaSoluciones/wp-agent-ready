@@ -54,6 +54,7 @@ function wpar_maybe_bootstrap_admin(): void {
 function wpar_bootstrap_init(): void {
 	require_once WPAR_PLUGIN_DIR . 'includes/activity-log.php';
 	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
+	require_once WPAR_PLUGIN_DIR . 'includes/updater.php';
 	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
 
 	// Hard-flush rewrite rules once whenever the plugin version changes so that

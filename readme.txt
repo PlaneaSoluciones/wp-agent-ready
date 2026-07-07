@@ -25,6 +25,7 @@ WP Agent Ready makes your WordPress site readable by AI agents, LLMs, and extern
 * Discoverability — `/.well-known/mcp.json` manifest with MCP server URL, and `/llms.txt` when no other plugin already provides one
 * Admin settings page — configure MCP server URL, API key, allowed post types, rate limit, and access control
 * Public access toggle — disable the content endpoint independently of search engine visibility
+* Auto-updates from GitHub Releases — update notices and one-click updates in Plugins, no manual ZIP upload required
 
 == Installation ==
 
