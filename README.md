@@ -10,6 +10,7 @@ WordPress plugin that exposes published content to AI agents and LLMs via a clea
 - Webhook receiver for re-indexing from an external MCP server
 - Exposes `/.well-known/mcp.json` for MCP discoverability (includes MCP server URL when configured)
 - Generates `/llms.txt` at the site root when no other plugin already provides one (cooperative: does not override physical files written by Yoast SEO, Rank Math, etc.)
+- Automatic updates from GitHub Releases — no manual ZIP upload required
 
 ## What it does NOT do
 
@@ -39,7 +40,9 @@ wp-agent-ready/
 │   ├── sanitizer.php    ← HTML cleaning
 │   ├── yoast.php        ← optional Yoast SEO integration
 │   ├── rate-limit.php   ← IP-based rate limiting
-│   └── webhook.php      ← webhook emitter/receiver
+│   ├── webhook.php      ← webhook emitter/receiver
+│   ├── updater.php      ← auto-updates from GitHub Releases
+│   └── lib/              ← vendorized third-party libraries (plugin-update-checker)
 ├── public/
 │   └── well-known.php   ← /.well-known/mcp.json + llms.txt
 └── languages/           ← i18n ready

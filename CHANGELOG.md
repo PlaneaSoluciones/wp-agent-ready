@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-07-07
+
 ### Añadido
 - Auto-actualización desde GitHub Releases: WordPress detecta ahora las nuevas versiones publicadas en el repositorio del plugin y permite actualizar en un clic desde Plugins, sin necesidad de subir el ZIP a mano. Nueva sección "Actualizaciones" en Ajustes con un campo opcional para un token de GitHub (solo necesario si se agota el límite de peticiones anónimas de la API).
 - Deploy automático a producción vía FTPS tras cada release (requiere configurar los secrets `SFTP_HOST`, `SFTP_USERNAME` y `SFTP_PASSWORD` en el repositorio).
