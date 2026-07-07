@@ -49,7 +49,9 @@ jobs:
       # Se salta silenciosamente hasta que se configuren los secrets SFTP_HOST/SFTP_USERNAME/SFTP_PASSWORD.
       # Si el puerto FTPS del hosting no es el 990 por defecto, añadir "port:" aquí.
       - name: Deploy a producción vía FTPS
-        if: ${{ secrets.SFTP_HOST != '' }}
+        if: ${{ env.SFTP_HOST != '' }}
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.SFTP_HOST }}
