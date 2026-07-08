@@ -48,8 +48,38 @@ jobs:
 
       # Se salta silenciosamente hasta que se configuren los secrets SFTP_HOST/SFTP_USERNAME/SFTP_PASSWORD.
       # Si el puerto FTPS del hosting no es el 990 por defecto, añadir "port:" aquí.
-      - name: Deploy a producción vía FTPS
+      #
+      # ISPConfig aplica la propiedad/permisos finales de las carpetas creadas por FTP con un
+      # pequeño retraso (proceso en segundo plano que reconcilia el propietario al usuario/grupo
+      # del sitio). Si el deploy crea una carpeta nueva y hace CWD justo después, puede chocar con
+      # esa ventana de carrera y fallar con "550 Can't change directory ... No such file or
+      # directory" aunque los permisos acaben siendo correctos segundos después. Por eso se reintenta
+      # una vez tras una espera antes de dar el deploy por fallido.
+      - name: Deploy a producción vía FTPS (intento 1)
+        id: ftps-deploy-1
         if: ${{ env.SFTP_HOST != '' }}
+        continue-on-error: true
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/wp-agent-ready/
+          server-dir: /wp-content/plugins/wp-agent-ready/
+
+      - name: Esperar antes de reintentar el deploy FTPS
+        if: ${{ env.SFTP_HOST != '' && steps.ftps-deploy-1.outcome == 'failure' }}
+        env:
+          SFTP_HOST: ${{ secrets.SFTP_HOST }}
+        run: |
+          echo "Primer intento de deploy FTPS falló, esperando a que ISPConfig fije los permisos..."
+          sleep 20
+
+      - name: Deploy a producción vía FTPS (reintento)
+        if: ${{ env.SFTP_HOST != '' && steps.ftps-deploy-1.outcome == 'failure' }}
         env:
           SFTP_HOST: ${{ secrets.SFTP_HOST }}
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
