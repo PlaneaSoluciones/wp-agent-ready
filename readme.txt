@@ -3,8 +3,8 @@ Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
 Requires at least: 6.0
 Tested up to: 6.8
-Stable tag: 0.11.0
-Requires PHP: 8.1
+Stable tag: 0.11.1
+Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,9 @@ Yes. Any public post type can be enabled from the settings page.
 By default nothing is deleted. If you want to remove all plugin data from the database, enable **Borrar datos al desinstalar** in **Settings › WP Agent Ready › Avanzado** before uninstalling.
 
 == Changelog ==
+
+= 0.11.1 =
+* Fixed: fatal parse error on PHP versions older than 8.2 (`true` as a standalone return type is a PHP 8.2 feature). The plugin now formally requires PHP 8.2, matching the currently security-supported PHP releases.
 
 = 0.11.0 =
 * Added: automatic updates from GitHub Releases — WordPress now detects new plugin versions and offers one-click updates from Plugins, no manual ZIP upload needed. New "Actualizaciones" section in settings with an optional GitHub token field.

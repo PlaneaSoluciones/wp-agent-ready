@@ -8,11 +8,15 @@ on:
 jobs:
   php-syntax:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Todas las versiones de PHP con soporte activo (mínimo declarado en composer.json en adelante).
+        php-version: ["8.2", "8.3", "8.4", "8.5"]
     steps:
       - uses: actions/checkout@v5
       - uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: ${{ matrix.php-version }}
       - name: PHP syntax check
         run: find . -name "*.php" -not -path "*/vendor/*" -print0 | xargs -0 -n1 php -l
 

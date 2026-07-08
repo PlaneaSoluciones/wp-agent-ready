@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.1] - 2026-07-08
+
+### Corregido
+- Error fatal de parseo en PHP anterior a 8.2: el tipo de retorno `true` como valor autónomo (`true|WP_Error`) es una característica exclusiva de PHP 8.2. El plugin ahora declara formalmente `Requires PHP: 8.2`, alineado con las versiones de PHP actualmente soportadas (8.2 y 8.3 con actualizaciones de seguridad; 8.4 y 8.5 con soporte activo). El CI comprueba ahora la sintaxis en las cuatro versiones soportadas y PHPStan valida la compatibilidad contra el mínimo declarado (8.2) independientemente de la versión de PHP del propio runner.
+
 ## [0.11.0] - 2026-07-07
 
 ### Añadido
