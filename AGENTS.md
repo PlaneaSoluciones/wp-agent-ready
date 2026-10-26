@@ -98,5 +98,5 @@ git tag vX.Y.Z && git push && git push --tags
 - `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que incluiría `vendor/`, `.github/` y demás ficheros de desarrollo.
 
 ## Documentación operacional
-- **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/wp-agent-ready-plugin-wordpress-para-agentes-ia
+- **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/ref-wp-agent-ready-plugin-wordpress-para-agentes-ia
 - **Stub WordPress:** https://bookstack.planea.com.es/books/wordpress/page/wp-agent-ready
