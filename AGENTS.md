@@ -55,7 +55,7 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 
 - `pr-title-lint.yml` — valida Conventional Commits en PRs
 - `lint-php.yml` — PHP syntax check + PHPCS + PHPStan en push/PR
-- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`; si están configurados los secrets `SFTP_HOST`/`SFTP_USERNAME`/`SFTP_PASSWORD`, despliega también por FTPS a `wp-content/plugins/wp-agent-ready/` en producción (mirror: borra en remoto lo ausente en el ZIP)
+- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`. Sin deploy: los sitios se actualizan con el auto-updater del plugin (`includes/updater.php`), que descarga el ZIP adjunto a la Release
 
 ## Releases
 
@@ -86,7 +86,7 @@ git tag vX.Y.Z && git push && git push --tags
 - [x] FASE 7 — llms.txt cooperativo: cede ante fichero físico de otro plugin (v0.8.1)
 - [x] FASE 8 — Fix 404 en llms.txt al desaparecer el fichero físico + auto-flush por versión (v0.9.1)
 - [x] FASE 9 — Fix redirect 301 trailing slash en /llms.txt (v0.9.2)
-- [x] FASE 10 — Auto-updater desde GitHub Releases + deploy FTPS en release-php.yml
+- [x] FASE 10 — Auto-updater desde GitHub Releases (el deploy FTPS se eliminó en v0.11.3: nunca llegó a completar y el auto-updater lo sustituye)
 
 ## Notas técnicas
 

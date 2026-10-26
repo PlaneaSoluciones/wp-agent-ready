@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Eliminado
+- Despliegue automático a producción por FTPS tras cada release. Nunca llegó a completarse con éxito y ya no es necesario: los sitios reciben las nuevas versiones con el auto-actualizador del plugin (Plugins › actualizar, o desde MainWP). Los secrets `SFTP_HOST`, `SFTP_USERNAME` y `SFTP_PASSWORD` del repositorio dejan de usarse.
+
 ## [0.11.2] - 2026-10-26
 
 ### Corregido
