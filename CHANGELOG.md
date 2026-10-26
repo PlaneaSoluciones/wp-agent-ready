@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.2] - 2026-10-26
+
+### Corregido
+- El despliegue automático a producción por FTPS fallaba de forma intermitente al crear carpetas nuevas, por el retraso con el que el servidor aplica los permisos. Ahora, si el primer intento falla, se reintenta automáticamente pasados 20 segundos.
+- Actualizadas las herramientas de desarrollo (PHPCS, WordPress Coding Standards y PHPCSUtils) a versiones sin vulnerabilidades conocidas. No afecta al plugin instalado en los sitios: estas herramientas solo se usan en desarrollo y en la CI, y no se incluyen en el ZIP.
+
 ## [0.11.1] - 2026-07-08
 
 ### Corregido
