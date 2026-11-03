@@ -97,6 +97,12 @@ git tag vX.Y.Z && git push && git push --tags
 - `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
 - `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que incluiría `vendor/`, `.github/` y demás ficheros de desarrollo.
 
+## Pendientes
+
+- **Añadir `secret-scan.yml`** (estándar de repos, al retomar el proyecto): este repo no tiene
+  escaneo de secretos en CI. Copiarlo de `~/.claude/workflows/secret-scan.yml`. El primer escaneo
+  recorre todo el historial y puede destapar hallazgos antiguos.
+
 ## Documentación operacional
 - **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/ref-wp-agent-ready-plugin-wordpress-para-agentes-ia
 - **Stub WordPress:** https://bookstack.planea.com.es/books/wordpress/page/wp-agent-ready
