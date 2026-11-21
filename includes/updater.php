@@ -2,16 +2,14 @@
 /**
  * Auto-updater: comprueba nuevas versiones en GitHub Releases.
  *
- * Vendorizado desde YahnisElsts/plugin-update-checker v6.0 (includes/lib/plugin-update-checker/).
- * Loaded on init (all contexts) so the library's own hooks also fire during WP-Cron,
- * not just when an admin is browsing wp-admin.
+ * Usa yahnis-elsts/plugin-update-checker (dependencia Composer de producción, viaja en
+ * el vendor/ del ZIP de la Release). Solo se carga en wp-admin y si existe
+ * vendor/autoload.php: ver wpar_bootstrap_init() en wp-agent-ready.php.
  *
  * @package WpAgentReady
  */
 
 use YahnisElsts\PluginUpdateChecker\v6\PucFactory;
-
-require_once WPAR_PLUGIN_DIR . 'includes/lib/plugin-update-checker/plugin-update-checker.php';
 
 /**
  * Register the GitHub-based update checker.
@@ -23,9 +21,11 @@ function wpar_bootstrap_updater(): void {
 		'wp-agent-ready'
 	);
 
-	// Use the wp-agent-ready.zip release asset (built clean by CI), not GitHub's
-	// auto-generated source zip, which would include dev-only files.
-	$update_checker->getVcsApi()->enableReleaseAssets();
+	// Use the wp-agent-ready.zip release asset (built by CI with the production vendor/),
+	// not GitHub's auto-generated source zip. enableReleaseAssets() only exists on the
+	// concrete GitHub API class, whose name lives in the library's internal versioned
+	// namespace (v6p0), so it can't be narrowed without coupling to that version.
+	$update_checker->getVcsApi()->enableReleaseAssets(); // @phpstan-ignore method.notFound
 
 	$token = get_option( 'wpar_github_token' );
 	if ( $token ) {

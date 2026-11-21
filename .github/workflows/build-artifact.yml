@@ -15,15 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.5"
+
+      - name: Instalar dependencias de produccion (Plugin Update Checker)
+        run: composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
       - name: Create plugin ZIP
         run: |
           mkdir -p dist/wp-agent-ready
           rsync -a \
             --exclude='.git' --exclude='.github' --exclude='.githooks' --exclude='.claude' \
-            --exclude='dist' --exclude='vendor' \
+            --exclude='dist' \
             --exclude='composer.json' --exclude='composer.lock' \
             --exclude='phpcs.xml' --exclude='phpstan.neon' --exclude='phpstan-bootstrap.php' \
-            --exclude='.gitignore' --exclude='wp-agent-ready-brief.md' \
+            --exclude='.gitignore' --exclude='.env' --exclude='wp-agent-ready-brief.md' \
             --exclude='AGENTS.md' --exclude='CLAUDE.md' \
             . dist/wp-agent-ready/
           cd dist && zip -r ../wp-agent-ready.zip wp-agent-ready/

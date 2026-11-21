@@ -54,8 +54,14 @@ function wpar_maybe_bootstrap_admin(): void {
 function wpar_bootstrap_init(): void {
 	require_once WPAR_PLUGIN_DIR . 'includes/activity-log.php';
 	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
-	require_once WPAR_PLUGIN_DIR . 'includes/updater.php';
 	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
+
+	// Auto-updater (Plugin Update Checker): only in wp-admin, and only if Composer's
+	// vendor/ is present (a git clone without `composer install` must not break the plugin).
+	if ( is_admin() && file_exists( WPAR_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+		require_once WPAR_PLUGIN_DIR . 'vendor/autoload.php';
+		require_once WPAR_PLUGIN_DIR . 'includes/updater.php';
+	}
 
 	// Hard-flush rewrite rules once whenever the plugin version changes so that
 	// existing installs pick up new or corrected rules in both the DB and .htaccess
