@@ -33,10 +33,7 @@ wp-agent-ready/
 │   ├── rate-limit.php   ← sliding window configurable (wpar_rate_limit) req/hora por IP
 │   ├── webhook.php      ← emite notificación en save_post; recibe POST /wpar/v1/sync
 │   ├── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
-│   ├── updater.php      ← auto-updater desde GitHub Releases (plugin-update-checker)
-│   └── lib/
-│       └── plugin-update-checker/  ← librería de terceros vendorizada (YahnisElsts, MIT, tag v6.0)
-│                           excluida de PHPCS/PHPStan; no editar a mano
+│   └── updater.php      ← auto-updater desde GitHub Releases (Plugin Update Checker vía Composer)
 ├── public/
 │   └── well-known.php   ← /.well-known/mcp.json (incluye mcp_server cuando está configurado) +
 │                           /llms.txt (solo si no existe fichero físico en ABSPATH) +
@@ -47,6 +44,10 @@ wp-agent-ready/
 └── languages/           ← text-domain: wp-agent-ready
 ```
 
+`composer.json` mezcla tooling de desarrollo (`require-dev`: phpcs/WPCS/phpstan, nunca en el ZIP) con una
+única dependencia de producción: `yahnis-elsts/plugin-update-checker` (`require`), que viaja en el `vendor/`
+del ZIP de cada Release. `vendor/` nunca en git.
+
 Prefijo de funciones: `wpar_`
 Prefijo opciones BD: `wpar_`
 Nada de lógica en el fichero principal — solo define constantes y registra hooks.
@@ -56,9 +57,10 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 - `pr-title-lint.yml` — valida Conventional Commits en PRs
 - `secret-scan.yml` — gitleaks en push/PR
 - `lint-php.yml` — PHP syntax check (matriz 8.2–8.5) + PHPCS + PHPStan en push/PR
-- `build-artifact.yml` — pre-release `dev` con el ZIP del último commit en `main`
+- `build-artifact.yml` — pre-release `dev` con el ZIP del último commit en `main` (también `workflow_dispatch`); mismo empaquetado que `release-php.yml`
 - `.github/dependabot.yml` — PRs semanales de Composer y GitHub Actions; hook `.githooks/pre-commit` con gitleaks (`git config core.hooksPath .githooks`)
-- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`. Sin deploy: los sitios se actualizan con el auto-updater del plugin (`includes/updater.php`), que descarga el ZIP adjunto a la Release
+- `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`. Antes de empaquetar corre `composer install --no-dev --optimize-autoloader` (PHP 8.5), así el ZIP lleva `vendor/` solo con Plugin Update Checker.
+- PHP de CI: phpcs, phpstan y release con 8.5 (última rama que WordPress marca compatible); `php -l` en matriz 8.2–8.5. Sin deploy: los sitios se actualizan con el auto-updater del plugin (`includes/updater.php`), que descarga el ZIP adjunto a la Release
 
 ## Releases
 
@@ -98,7 +100,13 @@ git tag vX.Y.Z && git push && git push --tags
 - `/llms.txt` (trailing slash): `wpar_handle_discovery_requests` está hookeado en `template_redirect` con prioridad 1 (antes que `redirect_canonical` de WP core, que va en prioridad 10). Esto evita que WordPress emita un 301 a `/llms.txt/` cuando el permalink structure usa trailing slash.
 - `wpar_bootstrap_init()` hace `flush_rewrite_rules()` automático la primera vez que se carga una nueva versión (compara `wpar_version` en BD con `WPAR_VERSION`).
 - `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
-- `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que incluiría `vendor/`, `.github/` y demás ficheros de desarrollo.
+- El auto-updater se carga desde `wpar_bootstrap_init()` en todas las peticiones (WP-Cron y la sincronización de MainWP también tienen que ver la actualización) si existe `vendor/autoload.php` (un clon sin `composer install` no rompe el plugin). Namespace corto `YahnisElsts\PluginUpdateChecker\v6` (nunca el interno `v6p0`). Si el repo se privatiza, `setAuthentication()` usa la opción `wpar_github_token`.
+- `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que no incluiría `vendor/` (sin PUC) y sí `.github/` y demás ficheros de desarrollo.
+
+## Pendientes
+
+- **PHPCS 4**: no se puede subir mientras `wp-coding-standards/wpcs` exija `squizlabs/php_codesniffer` `^3.x` (WPCS 3.4.1). Revisar al salir WPCS 4.
+- **`Requires at least: 6.0`** es incoherente con `Requires PHP: 8.2` (WordPress no admite PHP 8.2 hasta 6.1); revisarlo y fijarlo a la versión más antigua probada de verdad.
 
 ## Documentación operacional
 - **Referencia principal (arquitectura, API, ajustes):** https://bookstack.planea.com.es/books/geek-parade/page/ref-wp-agent-ready-plugin-wordpress-para-agentes-ia

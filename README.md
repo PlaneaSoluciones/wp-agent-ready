@@ -41,8 +41,7 @@ wp-agent-ready/
 │   ├── yoast.php        ← optional Yoast SEO integration
 │   ├── rate-limit.php   ← IP-based rate limiting
 │   ├── webhook.php      ← webhook emitter/receiver
-│   ├── updater.php      ← auto-updates from GitHub Releases
-│   └── lib/              ← vendorized third-party libraries (plugin-update-checker)
+│   └── updater.php      ← auto-updates from GitHub Releases (Plugin Update Checker, via Composer)
 ├── public/
 │   └── well-known.php   ← /.well-known/mcp.json + llms.txt
 └── languages/           ← i18n ready
