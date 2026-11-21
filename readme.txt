@@ -3,7 +3,7 @@ Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
 Requires at least: 6.0
 Tested up to: 7.1
-Stable tag: 0.11.2
+Stable tag: 0.11.3
 Requires PHP: 8.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -52,6 +52,11 @@ Yes. Any public post type can be enabled from the settings page.
 By default nothing is deleted. If you want to remove all plugin data from the database, enable **Borrar datos al desinstalar** in **Settings › WP Agent Ready › Avanzado** before uninstalling.
 
 == Changelog ==
+
+= 0.11.3 =
+* Changed: the auto-updater now uses Plugin Update Checker 6.0, which ships a safer Markdown parser for release notes. Updates keep coming from GitHub Releases with no configuration changes.
+* Changed: tested up to WordPress 7.1.
+* Removed: automatic FTPS deployment after each release; sites update through the built-in auto-updater.
 
 = 0.11.2 =
 * Fixed: automatic FTPS deployment to production now retries once after 20 seconds when the first attempt fails due to the server's delay in applying permissions on newly created folders.
