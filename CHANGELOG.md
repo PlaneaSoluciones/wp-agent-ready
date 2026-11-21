@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Cambiado
+- El auto-actualizador solo se carga en el escritorio de WordPress (wp-admin) y ya no añade nada a las páginas públicas del sitio. Las versiones nuevas se comprueban al entrar en el escritorio (y en Plugins › Buscar actualizaciones) en lugar de también en segundo plano.
+- La librería de actualizaciones (Plugin Update Checker 6.0) se instala ahora como dependencia gestionada en el ZIP del plugin, en vez de como copia manual, para que reciba las correcciones de seguridad en cuanto se publiquen. No cambia nada en la configuración ni en el origen de las actualizaciones (Releases de GitHub).
+
 ## [0.11.3] - 2026-11-21
 
 ### Cambiado
