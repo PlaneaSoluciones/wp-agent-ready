@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.3] - 2026-11-21
+
 ### Cambiado
 - El auto-actualizador usa la última versión de la librería Plugin Update Checker (6.0), que incluye una versión más segura del procesador de Markdown con el que se muestran las notas de cada versión. Las actualizaciones siguen llegando desde las Releases de GitHub sin cambios en la configuración.
 - Compatibilidad comprobada con WordPress 7.1.
