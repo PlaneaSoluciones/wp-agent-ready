@@ -2,14 +2,14 @@
 /**
  * Auto-updater: comprueba nuevas versiones en GitHub Releases.
  *
- * Vendorizado desde YahnisElsts/plugin-update-checker v5.7 (includes/lib/plugin-update-checker/).
+ * Vendorizado desde YahnisElsts/plugin-update-checker v6.0 (includes/lib/plugin-update-checker/).
  * Loaded on init (all contexts) so the library's own hooks also fire during WP-Cron,
  * not just when an admin is browsing wp-admin.
  *
  * @package WpAgentReady
  */
 
-use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+use YahnisElsts\PluginUpdateChecker\v6\PucFactory;
 
 require_once WPAR_PLUGIN_DIR . 'includes/lib/plugin-update-checker/plugin-update-checker.php';
 
