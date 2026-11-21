@@ -22,5 +22,5 @@ parameters:
     # PHPStan limitation with this pattern, not a bug in our code.
     ignoreErrors:
         -
-            message: '#Call to static method buildUpdateChecker\(\) on an unknown class YahnisElsts\\PluginUpdateChecker\\v5\\PucFactory#'
+            message: '#Call to static method buildUpdateChecker\(\) on an unknown class YahnisElsts\\PluginUpdateChecker\\v6\\PucFactory#'
             path: includes/updater.php

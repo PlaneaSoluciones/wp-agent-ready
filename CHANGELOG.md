@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Cambiado
+- El auto-actualizador usa la última versión de la librería Plugin Update Checker (6.0), que incluye una versión más segura del procesador de Markdown con el que se muestran las notas de cada versión. Las actualizaciones siguen llegando desde las Releases de GitHub sin cambios en la configuración.
+- Compatibilidad comprobada con WordPress 7.1.
+
 ### Eliminado
 - Despliegue automático a producción por FTPS tras cada release. Nunca llegó a completarse con éxito y ya no es necesario: los sitios reciben las nuevas versiones con el auto-actualizador del plugin (Plugins › actualizar, o desde MainWP). Los secrets `SFTP_HOST`, `SFTP_USERNAME` y `SFTP_PASSWORD` del repositorio dejan de usarse.
 
