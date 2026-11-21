@@ -1,12 +1,12 @@
 # AGENTS.md
 
 ## Qué es esto
-Plugin WordPress (v0.9.2) que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`. Instalado en producción en `planeasoluciones.com`.
+Plugin WordPress que expone el contenido publicado de un sitio de forma limpia y estructurada para que agentes de IA y LLMs externos puedan consumirlo. Endpoint principal: `GET /wp-json/wpar/v1/content`. Instalado en producción en `planeasoluciones.com`.
 
 ## Comandos
 
 ```bash
-# Instalar dependencias de desarrollo (requiere PHP >= 8.1)
+# Instalar dependencias de desarrollo (requiere PHP >= 8.2)
 composer install
 
 # Linting (PHPCS con WordPress Coding Standards)
@@ -35,7 +35,7 @@ wp-agent-ready/
 │   ├── admin.php        ← página Ajustes › WP Agent Ready (Settings API + AJAX)
 │   ├── updater.php      ← auto-updater desde GitHub Releases (plugin-update-checker)
 │   └── lib/
-│       └── plugin-update-checker/  ← librería de terceros vendorizada (YahnisElsts, MIT, tag v5.7)
+│       └── plugin-update-checker/  ← librería de terceros vendorizada (YahnisElsts, MIT, tag v6.0)
 │                           excluida de PHPCS/PHPStan; no editar a mano
 ├── public/
 │   └── well-known.php   ← /.well-known/mcp.json (incluye mcp_server cuando está configurado) +
@@ -54,7 +54,10 @@ Nada de lógica en el fichero principal — solo define constantes y registra ho
 ## Workflows
 
 - `pr-title-lint.yml` — valida Conventional Commits en PRs
-- `lint-php.yml` — PHP syntax check + PHPCS + PHPStan en push/PR
+- `secret-scan.yml` — gitleaks en push/PR
+- `lint-php.yml` — PHP syntax check (matriz 8.2–8.5) + PHPCS + PHPStan en push/PR
+- `build-artifact.yml` — pre-release `dev` con el ZIP del último commit en `main`
+- `.github/dependabot.yml` — PRs semanales de Composer y GitHub Actions; hook `.githooks/pre-commit` con gitleaks (`git config core.hooksPath .githooks`)
 - `release-php.yml` — crea GitHub Release + ZIP al pushear tag `v*`; notas desde `CHANGELOG.md`. Sin deploy: los sitios se actualizan con el auto-updater del plugin (`includes/updater.php`), que descarga el ZIP adjunto a la Release
 
 ## Releases

@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
       - name: Create plugin ZIP
         run: |
@@ -24,6 +24,7 @@ jobs:
             --exclude='composer.json' --exclude='composer.lock' \
             --exclude='phpcs.xml' --exclude='phpstan.neon' --exclude='phpstan-bootstrap.php' \
             --exclude='.gitignore' --exclude='wp-agent-ready-brief.md' \
+            --exclude='AGENTS.md' --exclude='CLAUDE.md' \
             . dist/wp-agent-ready/
           cd dist && zip -r ../wp-agent-ready.zip wp-agent-ready/
 
