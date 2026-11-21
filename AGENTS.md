@@ -100,7 +100,7 @@ git tag vX.Y.Z && git push && git push --tags
 - `/llms.txt` (trailing slash): `wpar_handle_discovery_requests` está hookeado en `template_redirect` con prioridad 1 (antes que `redirect_canonical` de WP core, que va en prioridad 10). Esto evita que WordPress emita un 301 a `/llms.txt/` cuando el permalink structure usa trailing slash.
 - `wpar_bootstrap_init()` hace `flush_rewrite_rules()` automático la primera vez que se carga una nueva versión (compara `wpar_version` en BD con `WPAR_VERSION`).
 - `wpar_get_mcp_base_url()` en `well-known.php` extrae `scheme://host[:port]` del webhook URL configurado. Usada también en `admin.php` para el test de conexión.
-- El auto-updater se carga desde `wpar_bootstrap_init()` solo si `is_admin()` y existe `vendor/autoload.php` (un clon sin `composer install` no rompe el plugin). Namespace corto `YahnisElsts\PluginUpdateChecker\v6` (nunca el interno `v6p0`). Si el repo se privatiza, `setAuthentication()` usa la opción `wpar_github_token`.
+- El auto-updater se carga desde `wpar_bootstrap_init()` en todas las peticiones (WP-Cron y la sincronización de MainWP también tienen que ver la actualización) si existe `vendor/autoload.php` (un clon sin `composer install` no rompe el plugin). Namespace corto `YahnisElsts\PluginUpdateChecker\v6` (nunca el interno `v6p0`). Si el repo se privatiza, `setAuthentication()` usa la opción `wpar_github_token`.
 - `includes/updater.php` usa `enableReleaseAssets()` para que el auto-updater descargue el `wp-agent-ready.zip` adjunto al Release (el ZIP limpio que genera `release-php.yml`), no el ZIP automático de GitHub por tag, que no incluiría `vendor/` (sin PUC) y sí `.github/` y demás ficheros de desarrollo.
 
 ## Pendientes

@@ -1,7 +1,7 @@
 === WP Agent Ready ===
 Contributors: planeasoluciones
 Tags: ai, llm, rest-api, agents, mcp
-Requires at least: 6.0
+Requires at least: 6.1
 Tested up to: 7.1
 Stable tag: 0.11.3
 Requires PHP: 8.2

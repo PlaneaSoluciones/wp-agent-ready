@@ -3,8 +3,8 @@
  * Auto-updater: comprueba nuevas versiones en GitHub Releases.
  *
  * Usa yahnis-elsts/plugin-update-checker (dependencia Composer de producción, viaja en
- * el vendor/ del ZIP de la Release). Solo se carga en wp-admin y si existe
- * vendor/autoload.php: ver wpar_bootstrap_init() en wp-agent-ready.php.
+ * el vendor/ del ZIP de la Release). Se carga en todas las peticiones (WP-Cron y
+ * MainWP también necesitan ver la actualización) si existe vendor/autoload.php: ver wpar_bootstrap_init() en wp-agent-ready.php.
  *
  * @package WpAgentReady
  */

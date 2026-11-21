@@ -4,7 +4,7 @@
  * Plugin URI:        https://github.com/PlaneaSoluciones/wp-agent-ready
  * Description:       Exposes WordPress published content to AI agents and LLMs via a clean REST API.
  * Version:           0.11.3
- * Requires at least: 6.0
+ * Requires at least: 6.1
  * Requires PHP:      8.2
  * Author:            Planea Soluciones
  * Author URI:        https://planeasoluciones.com
@@ -56,9 +56,10 @@ function wpar_bootstrap_init(): void {
 	require_once WPAR_PLUGIN_DIR . 'includes/webhook.php';
 	require_once WPAR_PLUGIN_DIR . 'public/well-known.php';
 
-	// Auto-updater (Plugin Update Checker): only in wp-admin, and only if Composer's
-	// vendor/ is present (a git clone without `composer install` must not break the plugin).
-	if ( is_admin() && file_exists( WPAR_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
+	// Auto-updater (Plugin Update Checker) on every request, not only wp-admin: WP-Cron and
+	// MainWP sync must see the update too. Only if Composer's vendor/ is present (a git clone
+	// without `composer install` must not break the plugin).
+	if ( file_exists( WPAR_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
 		require_once WPAR_PLUGIN_DIR . 'vendor/autoload.php';
 		require_once WPAR_PLUGIN_DIR . 'includes/updater.php';
 	}
